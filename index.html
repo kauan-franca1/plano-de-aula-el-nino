@@ -1,0 +1,578 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="Plano de aula El Niño · Modelagem Matemática: logaritmo e função exponencial com dados dos rios brasileiros.">
+<title>El Niño · Modelagem Matemática</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700;800&family=Work+Sans:wght@400;500;700&family=Montserrat:wght@700&display=swap">
+<style>
+/* Layout: página rolável no visual dos slides "El Niño · Modelagem Matemática". Fundo branco,
+   petróleo e azul-marinho com detalhes em laranja, formas inclinadas (paralelogramos de cantos
+   arredondados), gota d'água no canto de cada seção, cartões creme com borda colorida à esquerda.
+   Tema claro único, como nos slides. */
+:root{
+  --teal:#0f7c86; --teal-ink:#226670; --teal-2:#2a9aa1; --navy:#10202f; --orange:#ef8020; --coral:#d9532f;
+  --cream:#faf6f0; --line:#e8e0d4; --ink:#10202f; --text:#2b3a44; --mut:#5f6c75; --white:#ffffff;
+  --f-title:"Poppins","Montserrat","Segoe UI",sans-serif;
+  --f-body:"Work Sans","Segoe UI",system-ui,sans-serif;
+  --f-label:"Montserrat","Poppins",sans-serif;
+  color-scheme:light;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{animation:none!important;transition:none!important}}
+body{margin:0;background:var(--white);color:var(--text);font:400 18px/1.6 var(--f-body);-webkit-font-smoothing:antialiased;overflow-x:hidden}
+b,strong{font-weight:700;color:var(--ink)}
+img{max-width:100%;display:block}
+:where(a,button,input,[tabindex]):focus-visible{outline:3px solid var(--orange);outline-offset:3px;border-radius:6px}
+.wrap{max-width:1200px;margin:0 auto;padding-left:max(20px,env(safe-area-inset-left,0px));padding-right:max(20px,env(safe-area-inset-right,0px));position:relative}
+section{position:relative;overflow:hidden}
+.pad{padding-block:clamp(64px,8vw,112px)}
+
+/* gota d'água no canto, como em todos os slides */
+.drop{position:absolute;left:max(20px,4vw);top:clamp(16px,2.6vw,30px);width:34px;height:40px;z-index:3}
+
+/* tipografia */
+.h2{font:700 clamp(36px,4.6vw,58px)/1.1 var(--f-title);color:var(--ink);margin:0 0 14px;letter-spacing:-.01em;text-wrap:balance}
+.eyebrow{font:700 13px/1 var(--f-label);letter-spacing:.24em;text-transform:uppercase;color:var(--orange);margin:0 0 12px}
+.sub{font-size:clamp(16px,1.5vw,19px);color:var(--text);margin:0 0 28px;max-width:56ch}
+.num{font:700 clamp(30px,3vw,40px)/1 var(--f-title);color:var(--coral)}
+
+/* campos a preencher do modelo */
+.ph{font-style:normal;color:var(--mut);background:transparent;border-radius:4px;transition:background .2s ease,box-shadow .2s ease}
+body.show-ph .ph{background:#fff1c9;box-shadow:0 0 0 2px #f3c44f;color:#6b4c00}
+
+/* formas inclinadas */
+.slant{border-radius:28px;overflow:hidden;transform:skewX(-12deg)}
+.slant>img{width:120%;height:100%;object-fit:cover;transform:skewX(12deg) translateX(-8%)}
+.bar{position:absolute;border-radius:16px;transform:skewX(-12deg);z-index:2}
+.tag{display:inline-flex;align-items:center;justify-content:center;min-width:240px;padding:10px 34px;font:800 18px/1.2 var(--f-title);color:#fff;background:var(--navy);clip-path:polygon(9% 0,86% 0,100% 100%,0 100%,0 100%);border-radius:14px 14px 4px 4px}
+.tag.teal{background:var(--teal)}.tag.orange{background:var(--orange)}
+.tag.light{background:var(--white);color:var(--ink)}
+
+/* cartões creme com borda colorida */
+.ccard{background:var(--cream);border:1px solid var(--line);border-left:6px solid var(--teal);border-radius:10px;padding:18px 22px;min-width:0}
+.ccard.o{border-left-color:var(--orange)}.ccard.c{border-left-color:var(--coral)}
+.ccard h3{font:700 19px/1.3 var(--f-title);color:var(--ink);margin:0 0 6px}
+.ccard p{margin:0;font-size:16px;color:var(--text)}
+.ccard.btn{display:block;width:100%;text-align:left;font:inherit;cursor:pointer;transition:transform .2s ease,box-shadow .2s ease}
+.ccard.btn:hover{transform:translateY(-3px);box-shadow:0 10px 24px rgba(16,32,47,.08)}
+
+/* botões */
+.btn-p{display:inline-flex;align-items:center;gap:10px;border:0;border-radius:999px;padding:13px 24px;font:700 16px/1 var(--f-title);text-decoration:none;cursor:pointer;background:var(--teal);color:#fff;transition:background .2s ease}
+.btn-p:hover{background:#0b636b}
+.btn-p.o{background:var(--orange)}.btn-p.o:hover{background:#d06a10}
+.btn-p.ghost{background:transparent;color:var(--teal);box-shadow:inset 0 0 0 2px var(--teal)}
+.seg{display:inline-flex;background:var(--cream);border:1px solid var(--line);border-radius:999px;padding:4px;gap:4px;flex-wrap:wrap}
+.seg button{border:0;background:transparent;border-radius:999px;padding:9px 18px;font:700 15px/1.2 var(--f-title);color:var(--text);cursor:pointer;min-height:40px}
+.seg button[aria-pressed=true]{background:var(--teal);color:#fff}
+
+/* HUD */
+.progress{position:fixed;left:0;right:0;top:0;height:4px;z-index:40}
+.progress i{display:block;height:100%;width:0;background:var(--orange)}
+.sidenav{position:fixed;right:max(14px,env(safe-area-inset-right,0px));top:50%;transform:translateY(-50%);z-index:40;display:flex;flex-direction:column;gap:9px}
+.sidenav a{position:relative;display:block;width:12px;height:12px;border-radius:50%;background:#cfd6da;border:2px solid var(--white);box-shadow:0 0 0 1px #cfd6da}
+.sidenav a[aria-current=true]{background:var(--teal);box-shadow:0 0 0 1px var(--teal);transform:scale(1.25)}
+.sidenav a span{position:absolute;right:22px;top:50%;transform:translateY(-50%);white-space:nowrap;background:var(--navy);color:#fff;font:600 13px/1 var(--f-body);padding:7px 10px;border-radius:8px;opacity:0;pointer-events:none;transition:opacity .15s ease}
+.sidenav a:hover span,.sidenav a:focus-visible span{opacity:1}
+.phbtn{position:fixed;left:max(14px,env(safe-area-inset-left,0px));bottom:calc(14px + env(safe-area-inset-bottom,0px));z-index:40;border:0;border-radius:999px;background:var(--navy);color:#fff;padding:11px 16px;font:600 14px/1 var(--f-body);cursor:pointer;box-shadow:0 8px 24px rgba(16,32,47,.25)}
+.phbtn[aria-pressed=true]{background:#f3c44f;color:var(--navy)}
+@media (max-width:860px){.sidenav{display:none}}
+
+/* 1 · capa */
+.hero{min-height:clamp(560px,56vw,760px);padding:0}
+.hero .earth{position:absolute;left:-4%;top:10%;bottom:0;width:58%;border-radius:0 40px 0 0;overflow:hidden;clip-path:polygon(0 0,82% 0,100% 100%,0 100%)}
+.hero .earth img{width:100%;height:100%;object-fit:cover;will-change:transform}
+.hero .teal{position:absolute;right:0;top:0;bottom:12%;left:42%;background:var(--teal);border-radius:40px 0 0 40px;clip-path:polygon(0 0,100% 0,100% 100%,16% 100%);transform-origin:right}
+.hero .white{position:absolute;left:18%;right:0;top:19%;height:36%;background:var(--white);border-radius:24px 0 0 24px;clip-path:polygon(0 0,100% 0,100% 100%,11% 100%);display:flex;align-items:center;justify-content:flex-end;padding-right:6%}
+.hero h1{margin:0;font:800 clamp(64px,13vw,190px)/1 var(--f-title);color:var(--teal-ink);letter-spacing:.01em;white-space:nowrap}
+.hero .meta{position:absolute;left:58%;right:6%;top:60%;text-align:center;color:#fff}
+.hero .meta p{font:500 clamp(14px,1.6vw,20px)/1.2 var(--f-body);letter-spacing:.12em;text-transform:uppercase;margin:0 0 clamp(18px,3vw,42px)}
+.hero .pill{display:inline-block;background:#fff;color:var(--navy);font:700 clamp(14px,1.4vw,18px)/1 var(--f-title);padding:14px clamp(40px,6vw,90px);clip-path:polygon(0 0,86% 0,100% 100%,14% 100%);text-decoration:none}
+.hero .pill:hover{background:var(--cream)}
+@media (max-width:760px){
+  .hero{min-height:0;padding:72px 0 0}
+  .hero .earth{position:relative;left:0;top:0;width:100%;height:240px;clip-path:none;border-radius:0}
+  .hero .teal{position:absolute;left:0;top:auto;bottom:0;height:200px;clip-path:none;border-radius:0}
+  .hero .white{position:relative;left:0;top:0;height:auto;clip-path:none;border-radius:0;padding:12px 20px;justify-content:center}
+  .hero h1{font-size:18vw}
+  .hero .meta{position:relative;left:0;right:0;top:0;padding:28px 20px 40px;z-index:2}
+}
+
+/* 2 · visão geral */
+.over{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center}
+.over .cards{display:grid;gap:14px}
+.over .ccard{border-left-color:var(--orange)}
+.over .ccard h3{font-size:16px;letter-spacing:.02em}
+.over .pic{position:relative;height:clamp(360px,42vw,560px)}
+.over .pic .slant{position:absolute;inset:0 0 0 12%}
+.over .pic .bar{left:2%;top:4%;bottom:10%;width:22px;background:var(--orange)}
+@media (max-width:900px){.over{grid-template-columns:1fr}.over .pic{height:320px;order:-1}}
+
+/* 3 · habilidades */
+.hab{display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:center}
+.hab .pic{position:relative;height:clamp(420px,48vw,620px)}
+.hab .pic .slant{position:absolute;inset:0 8% 0 8%}
+.hab .pic .b1{left:16%;top:42%;height:40%;width:60px;background:var(--teal)}
+.hab .pic .b2{right:6%;top:14%;height:42%;width:66px;background:var(--orange)}
+.hab .pic canvas{position:absolute;inset:0 8%;width:84%;height:100%;pointer-events:none}
+.hab-list{display:grid;gap:26px;margin-top:24px}
+.hab-item button{border:0;background:none;padding:0;cursor:pointer;text-align:left;font:inherit}
+.hab-item p{margin:10px 0 0;font-size:17px}
+.hab-item .more{display:none;margin-top:8px;font-size:15px;color:var(--mut)}
+.hab-item.open .more{display:block}
+.hab-item .tag{transition:transform .2s ease}
+.hab-item button:hover .tag{transform:translateX(6px)}
+@media (max-width:900px){.hab{grid-template-columns:1fr}.hab .pic{height:300px}}
+
+/* 4 · competências */
+.comp{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center}
+.comp .items{display:grid;gap:26px;margin-top:22px}
+.comp .it{display:grid;grid-template-columns:64px 1fr;gap:6px 14px;align-items:baseline}
+.comp .it h3{font:700 19px/1.3 var(--f-title);color:var(--ink);margin:0}
+.comp .it p{grid-column:2;margin:0;font-size:16px}
+.comp .tiles{position:relative;height:clamp(380px,40vw,520px)}
+.comp .tiles .slant{position:absolute}
+.comp .tiles .t1{left:6%;top:0;width:76%;height:52%}
+.comp .tiles .t2{right:0;bottom:0;width:62%;height:58%}
+@media (max-width:900px){.comp{grid-template-columns:1fr}.comp .tiles{height:320px}}
+
+/* 5/6 · BNCC */
+.bncc{border-left:12px solid var(--teal)}
+.bncc-grid{display:grid;gap:14px;max-width:880px}
+.bncc-3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}
+.bncc-3 .ccard{min-height:220px}
+@media (max-width:860px){.bncc-3{grid-template-columns:1fr}.bncc-3 .ccard{min-height:0}}
+
+/* 7 · cronograma */
+.timeline{position:relative;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:18px;margin-top:30px}
+.timeline::before{content:"";position:absolute;left:12.5%;right:12.5%;top:58px;height:2px;background:#c8d3d6}
+.aula{border:0;background:none;padding:0;text-align:center;cursor:pointer;font:inherit;color:inherit}
+.aula .lbl{display:block;font:700 18px/1.2 var(--f-title);color:var(--ink);margin-bottom:16px}
+.aula .dot{display:block;width:26px;height:26px;margin:0 auto 22px;border-radius:50%;background:var(--teal);border:5px solid var(--white);box-shadow:0 0 0 2px var(--teal);position:relative;z-index:1;transition:transform .2s ease}
+.aula:last-child .dot{background:var(--orange);box-shadow:0 0 0 2px var(--orange)}
+.aula .ccard{display:block;text-align:left;min-height:160px}
+.aula:last-child .ccard{border-left-color:var(--orange)}
+.aula[aria-pressed=true] .dot{transform:scale(1.35)}
+.aula[aria-pressed=true] .ccard{box-shadow:0 0 0 3px var(--teal);background:#fff}
+.aula:last-child[aria-pressed=true] .ccard{box-shadow:0 0 0 3px var(--orange)}
+.aula-detail{margin-top:22px;background:var(--navy);color:#fff;border-radius:22px;padding:22px 26px;display:grid;grid-template-columns:auto 1fr;gap:6px 22px;align-items:center}
+.aula-detail .n{font:800 46px/1 var(--f-title);color:var(--orange);grid-row:span 2}
+.aula-detail h3{font:700 22px/1.2 var(--f-title);margin:0;color:#fff}
+.aula-detail p{margin:0;color:#cfe3e6}
+.aula-detail .ph{color:#9fb7bc}
+@media (max-width:860px){.timeline{grid-template-columns:repeat(2,minmax(0,1fr))}.timeline::before{display:none}}
+
+/* 8 · tempo e divisão */
+.tempo{display:grid;grid-template-columns:1.2fr 1fr;gap:44px;align-items:center}
+.tempo .pic{position:relative}
+.tempo .pic .shape{border-radius:30px;overflow:hidden;clip-path:polygon(6% 0,100% 0,100% 100%,0 100%,0 62%,10% 62%,10% 8%);aspect-ratio:16/8}
+.tempo .pic .shape img{width:100%;height:100%;object-fit:cover}
+.tempo .strip{margin-top:16px;background:var(--teal);color:#fff;border-radius:6px;padding:16px 20px;font-size:15px}
+.tempo .tags{display:grid;gap:14px;margin-top:24px}
+.tempo .ptag{display:block;padding:20px 40px;color:#fff;font-size:15px;clip-path:polygon(0 0,86% 0,100% 100%,14% 100%);background:var(--teal)}
+.tempo .ptag.o{background:var(--orange)}
+.calc{margin-top:24px;background:var(--cream);border:1px solid var(--line);border-radius:18px;padding:18px 20px}
+.calc label{display:flex;justify-content:space-between;font:600 15px/1.2 var(--f-body);color:var(--ink);margin:10px 0 4px}
+.calc output{color:var(--teal);font-weight:700}
+.calc input{width:100%;accent-color:var(--teal)}
+.calc .bars{display:flex;height:34px;border-radius:8px;overflow:hidden;margin-top:14px}
+.calc .bars span{display:grid;place-items:center;color:#fff;font:700 12px/1 var(--f-body);transition:flex .3s ease}
+.calc .tot{margin-top:10px;font-size:15px}
+@media (max-width:900px){.tempo{grid-template-columns:1fr}}
+
+/* 9 · atividades */
+.ativ{display:grid;grid-template-columns:1fr 1.1fr;gap:40px;align-items:center}
+.moments{display:grid;gap:22px;margin-top:22px}
+.moment p{margin:10px 0 0}
+.ativ .art{position:relative;height:clamp(420px,46vw,600px)}
+.ativ .art .slant{position:absolute}
+.ativ .art .a1{left:10%;top:0;width:44%;height:70%}
+.ativ .art .a2{left:30%;top:16%;width:44%;height:52%;background:var(--navy)}
+.ativ .art .a3{right:0;bottom:0;width:46%;height:70%}
+@media (max-width:900px){.ativ{grid-template-columns:1fr}.ativ .art{height:340px}}
+
+/* 10 · aplicação */
+.apl-top{display:grid;grid-template-columns:1fr 1fr 1.4fr;gap:28px;align-items:start}
+.apl-top h3{font:700 19px/1.3 var(--f-title);color:var(--ink);margin:0 0 6px}
+.apl-top p{margin:0;font-size:16px}
+.apl-art{position:relative;margin-top:36px;height:clamp(320px,34vw,440px)}
+.apl-art .slant{position:absolute;left:4%;top:0;width:66%;height:100%}
+.apl-art .box{position:absolute;right:0;top:22%;width:44%;background:var(--navy);color:#e4eef0;padding:26px 34px;border-radius:24px;transform:skewX(-12deg);font-size:16px}
+.apl-art .box>div{transform:skewX(12deg)}
+.apl-art .box .ph{color:#9fb7bc}
+@media (max-width:900px){.apl-top{grid-template-columns:1fr}.apl-art{height:auto}.apl-art .slant{position:relative;left:0;width:100%;height:240px}.apl-art .box{position:relative;width:auto;transform:none;margin-top:14px}.apl-art .box>div{transform:none}}
+
+/* laboratórios */
+.lab{background:var(--cream);border:1px solid var(--line);border-radius:28px;padding:clamp(18px,2.6vw,30px);margin-top:28px}
+.lab-head{display:flex;justify-content:space-between;align-items:flex-start;gap:14px;flex-wrap:wrap;margin-bottom:12px}
+.lab-head h3{font:700 22px/1.25 var(--f-title);color:var(--ink);margin:0}
+.lab-head .tagx{display:inline-block;background:var(--navy);color:#fff;border-radius:999px;padding:6px 12px;font:700 12px/1 var(--f-label);letter-spacing:.12em;text-transform:uppercase}
+.lab-grid{display:grid;grid-template-columns:1.5fr 1fr;gap:24px;align-items:start}
+.lab svg{display:block;width:100%;height:auto;background:#fff;border-radius:18px;touch-action:pan-y}
+.lab svg text{font-family:var(--f-body)}
+.ctrl label{display:flex;justify-content:space-between;font:600 15px/1.2 var(--f-body);color:var(--ink);margin:12px 0 4px}
+.ctrl output{color:var(--teal);font-weight:700;font-variant-numeric:tabular-nums}
+.ctrl input{width:100%;accent-color:var(--teal)}
+.readout{margin-top:14px;display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.readout div{background:#fff;border-radius:14px;padding:12px 14px}
+.readout b{display:block;font:800 24px/1.1 var(--f-title);color:var(--teal);font-variant-numeric:tabular-nums}
+.readout span{font-size:13px;color:var(--mut)}
+.note{font-size:14px;color:var(--mut);margin:12px 0 0}
+@media (max-width:900px){.lab-grid{grid-template-columns:1fr}}
+
+/* 11 · avaliação e recursos */
+.aval{display:grid;grid-template-columns:1fr 1fr;gap:44px;align-items:center}
+.aval .items{display:grid;gap:30px;margin-top:22px}
+.aval .art{position:relative;height:clamp(420px,46vw,600px)}
+.aval .art .slant{position:absolute;inset:0 0 0 14%}
+@media (max-width:900px){.aval{grid-template-columns:1fr}.aval .art{height:300px}}
+
+/* 12 · referências */
+.refs{border-left:12px solid var(--teal)}
+.refs ul{margin:12px 0 0;padding-left:22px;max-width:900px}
+.refs li{margin:8px 0;font-size:18px}
+
+/* 13 · obrigado */
+.thanks{min-height:clamp(560px,56vw,760px)}
+.thanks h2{font:800 clamp(52px,8vw,110px)/1 var(--f-title);color:var(--teal-ink);margin:0;letter-spacing:.02em}
+.thanks .t1{position:absolute;left:6%;bottom:10%;width:44%;height:42%}
+.thanks .t2{position:absolute;right:8%;top:14%;width:34%;height:50%}
+.thanks .slant{width:100%;height:100%}
+@media (max-width:760px){.thanks .t1,.thanks .t2{position:relative;left:auto;right:auto;top:auto;bottom:auto;width:auto;height:220px;margin-top:24px}}
+
+/* QR */
+.qr .h2{text-align:center}
+.qr .sub{text-align:center;margin:0 auto 30px}
+.qr-card{max-width:380px;margin:0 auto;background:var(--cream);border:1px solid var(--line);border-left:6px solid var(--teal);border-radius:16px;padding:26px;text-align:center}
+.qr-card img{width:100%;max-width:280px;aspect-ratio:1;margin:0 auto 14px;background:#fff;border-radius:14px;padding:10px}
+.qr-card h3{font:700 20px/1.2 var(--f-title);color:var(--teal);margin:0 0 6px}
+.qr-card a{font-size:15px;color:var(--text);word-break:break-all}
+</style>
+<style>[hidden]{display:none!important}</style>
+</head>
+<body>
+
+
+<div class="progress" aria-hidden="true"><i id="prog"></i></div>
+<nav class="sidenav" id="sidenav" aria-label="Seções"></nav>
+<button type="button" class="phbtn" id="phbtn" aria-pressed="false">Destacar campos a preencher (<span id="phn">0</span>)</button>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs><symbol id="gota" viewBox="0 0 34 40"><path d="M17 2C17 2 32 18 32 26.5A15 15 0 0 1 2 26.5C2 18 17 2 17 2Z" fill="#0f7c86"/></symbol></defs></svg>
+
+<main>
+<!-- 1 · CAPA -->
+<section class="hero" id="inicio" data-label="Capa">
+  <svg class="drop" aria-hidden="true"><use href="#gota"/></svg>
+  <div class="earth"><img class="px" data-px="1" src="assets/terra-sst.webp" alt="Imagem de satélite das Américas com a mancha quente do El Niño no Pacífico" width="1200" height="768"></div>
+  <div class="teal" aria-hidden="true"></div>
+  <div class="white"><h1>EL NIÑO</h1></div>
+  <div class="meta"><p>Modelagem Matemática</p><a class="pill" href="#visao-geral">Plano de aula</a></div>
+</section>
+
+<!-- 2 · VISÃO GERAL -->
+<section class="pad" id="visao-geral" data-label="Visão geral do plano">
+  <svg class="drop" aria-hidden="true"><use href="#gota"/></svg>
+  <div class="wrap over">
+    <div>
+      <h2 class="h2">Visão geral do plano</h2>
+      <div class="cards">
+        <div class="ccard"><h3>Tema</h3><p>Logaritmo e função exponencial</p></div>
+        <div class="ccard"><h3>Duração total</h3><p><i class="ph">[nº de aulas × minutos]</i></p></div>
+        <div class="ccard"><h3>Turma / série</h3><p><i class="ph">[ex.: 1º ano do Ensino Médio]</i></p></div>
+        <div class="ccard"><h3>Outro</h3><p><i class="ph">[seu nome]</i></p></div>
+      </div>
+    </div>
+    <div class="pic"><span class="bar" aria-hidden="true"></span><div class="slant"><img src="assets/rio.webp" alt="Rio cercado de floresta" loading="lazy"></div></div>
+  </div>
+</section>
+
+<!-- 3 · HABILIDADES -->
+<section class="pad" id="habilidades" data-label="Habilidades">
+  <svg class="drop" aria-hidden="true"><use href="#gota"/></svg>
+  <div class="wrap hab">
+    <div class="pic" aria-hidden="true"><div class="slant" style="background:#10202f"><img src="assets/linhas.webp" alt=""></div><span class="bar b1"></span><span class="bar b2"></span></div>
+    <div>
+      <h2 class="h2">Habilidades</h2>
+      <p class="sub">Habilidades da BNCC trabalhadas neste plano. Toque numa habilidade para ver o que ela pede.</p>
+      <div class="hab-list">
+        <div class="hab-item"><button type="button" aria-expanded="false"><span class="tag">EM13MAT304</span></button><p>Resolver e elaborar problemas com funções exponenciais. <i class="ph">[ajuste]</i></p><p class="more">No plano: a vazão do rio cresce de forma exponencial quando a cota sobe.</p></div>
+        <div class="hab-item"><button type="button" aria-expanded="false"><span class="tag">EM13MAT305</span></button><p>Resolver e elaborar problemas com funções logarítmicas. <i class="ph">[ajuste]</i></p><p class="more">No plano: o logaritmo responde "quanto a cota precisa subir para a vazão chegar a um valor".</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 4 · COMPETÊNCIAS -->
+<section class="pad" id="competencias" data-label="Competências">
+  <svg class="drop" aria-hidden="true"><use href="#gota"/></svg>
+  <div class="wrap comp">
+    <div>
+      <h2 class="h2">Competências</h2>
+      <p class="sub">Competências da BNCC que orientam as aulas. <i class="ph">[inserir]</i></p>
+      <div class="items">
+        <div class="it"><span class="num">01</span><h3>Competência 1</h3><p><i class="ph">[Inserir descrição]</i></p></div>
+        <div class="it"><span class="num">02</span><h3>Competência 3</h3><p><i class="ph">[Inserir descrição]</i></p></div>
+      </div>
+    </div>
+    <div class="tiles" aria-hidden="true">
+      <div class="slant t1" style="background:#10202f"><img src="assets/curva.webp" alt=""></div>
+      <div class="slant t2"><img src="assets/ondas-circ.webp" alt=""></div>
+    </div>
+  </div>
+</section>
+
+<!-- 5 · BNCC HABILIDADES -->
+<section class="pad bncc" id="bncc-habilidades" data-label="BNCC: habilidades">
+  <div class="wrap">
+    <p class="eyebrow">BNCC</p>
+    <h2 class="h2">Habilidades</h2>
+    <div class="bncc-grid">
+      <div class="ccard"><h3>EM13MAT304</h3><p>Resolver e elaborar problemas com funções exponenciais. <i class="ph">[confira e ajuste o texto]</i></p></div>
+      <div class="ccard c"><h3>EM13MAT305</h3><p>Resolver e elaborar problemas com funções logarítmicas. <i class="ph">[confira e ajuste o texto]</i></p></div>
+      <div class="ccard"><h3><i class="ph">[Outra habilidade]</i></h3><p><i class="ph">[Inserir código e descrição]</i></p></div>
+    </div>
+  </div>
+</section>
+
+<!-- 6 · BNCC COMPETÊNCIAS -->
+<section class="pad bncc" id="bncc-competencias" data-label="BNCC: competências">
+  <div class="wrap">
+    <p class="eyebrow">BNCC</p>
+    <h2 class="h2">Competências</h2>
+    <div class="bncc-3">
+      <div class="ccard"><h3>Competência específica 1</h3><p><i class="ph">[Inserir descrição]</i></p></div>
+      <div class="ccard c"><h3>Competência específica 3</h3><p><i class="ph">[Inserir descrição]</i></p></div>
+      <div class="ccard"><h3>Competências gerais</h3><p><i class="ph">[Inserir descrição]</i></p></div>
+    </div>
+  </div>
+</section>
+
+<!-- 7 · CRONOGRAMA -->
+<section class="pad bncc" id="cronograma" data-label="Cronograma">
+  <div class="wrap">
+    <p class="eyebrow">Cronograma</p>
+    <h2 class="h2">Tempo e divisão das aulas</h2>
+    <div class="timeline" id="timeline" role="group" aria-label="Aulas">
+      <button type="button" class="aula" aria-pressed="true"><span class="lbl">Aula 1</span><span class="dot"></span><span class="ccard"><h3>Função exponencial</h3><p><i class="ph">[tempo: __ min]</i><br><i class="ph">[conteúdo e objetivo]</i></p></span></button>
+      <button type="button" class="aula" aria-pressed="false"><span class="lbl">Aula 2</span><span class="dot"></span><span class="ccard"><h3>Logaritmo: definição</h3><p><i class="ph">[tempo: __ min]</i><br><i class="ph">[conteúdo e objetivo]</i></p></span></button>
+      <button type="button" class="aula" aria-pressed="false"><span class="lbl">Aula 3</span><span class="dot"></span><span class="ccard"><h3>Propriedades e gráficos</h3><p><i class="ph">[tempo: __ min]</i><br><i class="ph">[conteúdo e objetivo]</i></p></span></button>
+      <button type="button" class="aula" aria-pressed="false"><span class="lbl">Aula 4</span><span class="dot"></span><span class="ccard"><h3>Aplicação com a turma</h3><p><i class="ph">[tempo: __ min]</i><br><i class="ph">[conteúdo e objetivo]</i></p></span></button>
+    </div>
+    <div class="aula-detail" aria-live="polite"><span class="n" id="ad-n">1</span><h3 id="ad-h">Função exponencial</h3><p id="ad-p"></p></div>
+  </div>
+</section>
+
+<!-- 8 · TEMPO E DIVISÃO -->
+<section class="pad" id="tempo" data-label="Tempo e divisão das aulas">
+  <svg class="drop" aria-hidden="true"><use href="#gota"/></svg>
+  <div class="wrap tempo">
+    <div class="pic">
+      <div class="shape"><img src="assets/gradiente.webp" alt="" aria-hidden="true"></div>
+      <div class="strip">Aula 3: propriedades e gráficos <i class="ph" style="color:#d6eef0">[__ min]</i> • Aula 4: aplicação com a turma <i class="ph" style="color:#d6eef0">[__ min]</i></div>
+    </div>
+    <div>
+      <h2 class="h2">Tempo e divisão das aulas</h2>
+      <p class="sub"><i class="ph">[Nº de aulas]</i> de <i class="ph">[__]</i> minutos, organizadas em quatro momentos.</p>
+      <div class="tags">
+        <span class="ptag">• Aula 1: função exponencial <i class="ph" style="color:#d6eef0">[__ min]</i></span>
+        <span class="ptag o">• Aula 2: logaritmo e definição <i class="ph" style="color:#fff3e6">[__ min]</i></span>
+      </div>
+      <div class="calc">
+        <p class="eyebrow" style="margin:0">Planejar o tempo</p>
+        <label for="tmin">Minutos por aula <output id="tmin-o" for="tmin">50</output></label><input type="range" id="tmin" min="30" max="100" step="5" value="50">
+        <div class="bars" id="tbars" aria-hidden="true"></div>
+        <p class="tot" id="ttot"></p>
+        <p class="note" style="margin-top:4px">Simulação para ajudar a preencher os campos; o plano ainda não define esses tempos.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 9 · ATIVIDADES -->
+<section class="pad" id="atividades" data-label="Atividades">
+  <svg class="drop" aria-hidden="true"><use href="#gota"/></svg>
+  <div class="wrap ativ">
+    <div>
+      <h2 class="h2">Atividades</h2>
+      <p class="sub">Três momentos em cada aula: abertura, desenvolvimento e fechamento.</p>
+      <div class="moments">
+        <div class="moment"><span class="tag">01. Abertura</span><p><i class="ph">[Pergunta-gatilho, exemplo ou problema inicial]</i></p></div>
+        <div class="moment"><span class="tag">02. Desenvolvimento</span><p><i class="ph">[Explicação, exercícios guiados e discussão]</i></p></div>
+      </div>
+    </div>
+    <div class="art" aria-hidden="true">
+      <div class="slant a1"><img src="assets/mar-claro.webp" alt=""></div>
+      <div class="slant a2"></div>
+      <div class="slant a3"><img src="assets/sol-alto.webp" alt=""></div>
+    </div>
+  </div>
+</section>
+
+<!-- 10 · APLICAÇÃO COM A SALA -->
+<section class="pad" id="aplicacao" data-label="Aplicação com a sala">
+  <svg class="drop" aria-hidden="true"><use href="#gota"/></svg>
+  <div class="wrap">
+    <div class="apl-top">
+      <div><h3>01. Produto final</h3><p><i class="ph">[O que os alunos entregam: gráfico, relatório, apresentação]</i></p></div>
+      <div><h3>02. Avaliação</h3><p><i class="ph">[Critérios de avaliação da atividade]</i></p></div>
+      <div><h2 class="h2" style="font-size:clamp(32px,3.6vw,46px)">Aplicação com a sala</h2><p>El Niño e o nível dos rios: modelo exponencial e logaritmo com dados do SACE/SGB.</p></div>
+    </div>
+    <div class="apl-art">
+      <div class="slant"><img src="assets/sol-mar.webp" alt="" aria-hidden="true"></div>
+      <div class="box"><div><i class="ph">[Descrever a atividade: organização da turma, materiais, tempo e passos com os dados dos rios]</i></div></div>
+    </div>
+
+    <div class="lab" id="lab-explog">
+      <div class="lab-head"><h3>Exponencial e logaritmo: uma desfaz a outra</h3><span class="tagx">Exemplo interativo</span></div>
+      <div class="lab-grid">
+        <svg id="el-svg" role="img" aria-label="Gráficos de y = b elevado a x e de y = log na base b de x, espelhados pela reta y = x"></svg>
+        <div class="ctrl">
+          <div class="seg" id="el-b" role="group" aria-label="Base"><button type="button" data-b="2" aria-pressed="true">base 2</button><button type="button" data-b="e" aria-pressed="false">base e</button><button type="button" data-b="10" aria-pressed="false">base 10</button></div>
+          <label for="el-x">Expoente x <output id="el-xo" for="el-x">1,5</output></label><input type="range" id="el-x" min="-2" max="3" step="0.1" value="1.5">
+          <div class="readout" aria-live="polite"><div><b id="el-y">2,83</b><span id="el-yl">2^x</span></div><div><b id="el-l">1,5</b><span id="el-ll">log₂ de volta</span></div></div>
+          <p class="note">O ponto laranja (x, bˣ) e o ponto azul (bˣ, x) são espelhos pela reta y = x: por isso o logaritmo desfaz a exponencial.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="lab" id="lab-rio">
+      <div class="lab-head"><h3>A régua do rio: cota e vazão no Rio Uruguai</h3><span class="tagx">Exemplo interativo · dados SGB</span></div>
+      <div class="lab-grid">
+        <svg id="rio-svg" role="img" aria-label="Vazão do Rio Uruguai em Uruguaiana em função da cota da régua"></svg>
+        <div class="ctrl">
+          <p style="margin:0;font-size:15px">Dois registros do SGB em Uruguaiana (RS): cota 7,5 m ↔ 10.942 m³/s e cota 13,54 m ↔ 31.025 m³/s (jul/1983, El Niño forte).</p>
+          <p style="margin:8px 0 0;font:700 16px/1.4 var(--f-title);color:var(--ink)">Q = 10.942 · e^(0,1725·(h − 7,5))</p>
+          <label for="rio-h">Cota na régua <output id="rio-ho" for="rio-h">9,87 m</output></label><input type="range" id="rio-h" min="6" max="14" step="0.01" value="9.87">
+          <div class="readout" aria-live="polite"><div><b id="rio-q">16.470</b><span>vazão (m³/s)</span></div><div><b id="rio-s">Inundação</b><span>situação na régua</span></div></div>
+          <label for="rio-alvo">Vazão desejada (logaritmo) <output id="rio-ao" for="rio-alvo">20.000 m³/s</output></label><input type="range" id="rio-alvo" min="6000" max="34000" step="500" value="20000">
+          <p class="note" id="rio-log"></p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 11 · AVALIAÇÃO E RECURSOS -->
+<section class="pad" id="avaliacao" data-label="Avaliação e recursos">
+  <svg class="drop" aria-hidden="true"><use href="#gota"/></svg>
+  <div class="wrap aval">
+    <div>
+      <h2 class="h2">Avaliação e recursos</h2>
+      <p class="sub">Como a aprendizagem será verificada e o que será necessário.</p>
+      <div class="items">
+        <div><div class="it" style="display:grid;grid-template-columns:64px 1fr;gap:6px 14px"><span class="num">01</span><h3 style="font:700 19px/1.3 var(--f-title);margin:0;color:var(--ink)">Avaliação</h3><p style="grid-column:2;margin:0;font-size:16px"><i class="ph">[Instrumentos, critérios e pesos]</i></p></div></div>
+        <div><div class="it" style="display:grid;grid-template-columns:64px 1fr;gap:6px 14px"><span class="num">02</span><h3 style="font:700 19px/1.3 var(--f-title);margin:0;color:var(--ink)">Recursos</h3><p style="grid-column:2;margin:0;font-size:16px"><i class="ph">[Quadro, computador, planilha, dados SACE/SGB, calculadora científica]</i></p></div></div>
+      </div>
+    </div>
+    <div class="art" aria-hidden="true"><div class="slant"><img src="assets/mar-claro.webp" alt=""></div></div>
+  </div>
+</section>
+
+<!-- 12 · REFERÊNCIAS -->
+<section class="pad refs" id="referencias" data-label="Referências">
+  <div class="wrap">
+    <p class="eyebrow">Fontes</p>
+    <h2 class="h2">Referências</h2>
+    <ul>
+      <li>SACE / Serviço Geológico do Brasil (SGB/CPRM) – dados de níveis dos rios. <i class="ph">[inserir link e data de acesso]</i></li>
+      <li><i class="ph">[Livro didático de Matemática – autor, título, edição, ano]</i></li>
+      <li>BRASIL. Base Nacional Comum Curricular. Brasília: MEC, 2018.</li>
+      <li><i class="ph">[Outra referência]</i></li>
+    </ul>
+  </div>
+</section>
+
+<!-- 13 · OBRIGADO -->
+<section class="pad thanks" id="obrigado" data-label="Obrigado(a)!">
+  <svg class="drop" aria-hidden="true"><use href="#gota"/></svg>
+  <div class="wrap"><h2>OBRIGADO(A)!</h2></div>
+  <div class="t1" aria-hidden="true"><div class="slant" style="background:#10202f"><img src="assets/linhas-curva.webp" alt=""></div></div>
+  <div class="t2" aria-hidden="true"><div class="slant"><img src="assets/sol-mar.webp" alt=""></div></div>
+</section>
+
+<!-- QR -->
+<section class="pad qr" id="acesse" data-label="Acesse pelo celular">
+  <svg class="drop" aria-hidden="true"><use href="#gota"/></svg>
+  <div class="wrap">
+    <h2 class="h2">Acesse pelo celular</h2>
+    <p class="sub">Aponte a câmera para o código e explore os exemplos interativos.</p>
+    <div class="qr-card"><img src="assets/qr-plano.svg" alt="QR code para esta página" width="280" height="280"><h3>Plano de aula · El Niño</h3><a href="https://kauan-franca1.github.io/plano-de-aula-el-nino/" id="qr-link">kauan-franca1.github.io/plano-de-aula-el-nino</a></div>
+  </div>
+</section>
+</main>
+
+<script>
+function $(i){return document.getElementById(i)}
+function fmt(n,d){return n.toLocaleString("pt-BR",{minimumFractionDigits:d,maximumFractionDigits:d})}
+function press(g,b){Array.prototype.forEach.call(g.querySelectorAll("button"),function(x){x.setAttribute("aria-pressed",x===b?"true":"false")})}
+var RM=window.matchMedia("(prefers-reduced-motion:reduce)").matches;
+
+/* campos a preencher */
+(function(){var n=document.querySelectorAll(".ph").length,b=$("phbtn");$("phn").textContent=n;
+  b.addEventListener("click",function(){var on=b.getAttribute("aria-pressed")==="true";b.setAttribute("aria-pressed",on?"false":"true");document.body.classList.toggle("show-ph",!on)})})();
+
+/* habilidades */
+document.querySelectorAll(".hab-item button").forEach(function(b){b.addEventListener("click",function(){var it=b.parentNode,on=it.classList.toggle("open");b.setAttribute("aria-expanded",on?"true":"false")})});
+
+/* cronograma */
+(function(){var tl=$("timeline"),as=tl.querySelectorAll(".aula");
+  function sel(i){press(tl,as[i]);$("ad-n").textContent=i+1;$("ad-h").textContent=as[i].querySelector("h3").textContent;$("ad-p").innerHTML=as[i].querySelector("p").innerHTML.replace("<br>"," · ")}
+  as.forEach(function(a,i){a.addEventListener("click",function(){sel(i)})});sel(0)})();
+
+/* planejar o tempo */
+(function(){var r=$("tmin"),names=["Aula 1","Aula 2","Aula 3","Aula 4"],cols=["#0f7c86","#ef8020","#226670","#d9532f"];
+  function d(){var m=+r.value;$("tmin-o").textContent=m;$("tbars").innerHTML=names.map(function(n,i){return'<span style="flex:1;background:'+cols[i]+'">'+n+'</span>'}).join("");
+    $("ttot").innerHTML="4 aulas × "+m+" min = <b>"+(4*m)+" min</b> ("+fmt(4*m/60,1)+" h) no total."}
+  r.addEventListener("input",d);d()})();
+
+/* exponencial × logaritmo */
+(function(){var svg=$("el-svg"),seg=$("el-b"),xs=$("el-x"),base="2";
+  function B(){return base==="e"?Math.E:+base}
+  function draw(){var W=Math.max(300,Math.round(svg.getBoundingClientRect().width)||600),H=Math.round(W*.72);svg.setAttribute("viewBox","0 0 "+W+" "+H);
+    var m=34,lo=-2.5,hi=8,sx=function(v){return m+(v-lo)/(hi-lo)*(W-2*m)},sy=function(v){return H-m-(v-lo)/(hi-lo)*(H-2*m)},b=B(),x=+xs.value,y=Math.pow(b,x),s="";
+    for(var g=-2;g<=8;g+=2){s+='<line x1="'+sx(g)+'" x2="'+sx(g)+'" y1="'+sy(lo)+'" y2="'+sy(hi)+'" stroke="#eef1f2"/><line x1="'+sx(lo)+'" x2="'+sx(hi)+'" y1="'+sy(g)+'" y2="'+sy(g)+'" stroke="#eef1f2"/>';if(g)s+='<text x="'+sx(g)+'" y="'+(sy(0)+16)+'" text-anchor="middle" font-size="12" fill="#5f6c75">'+g+'</text><text x="'+(sx(0)-6)+'" y="'+(sy(g)+4)+'" text-anchor="end" font-size="12" fill="#5f6c75">'+g+'</text>'}
+    s+='<line x1="'+sx(lo)+'" x2="'+sx(hi)+'" y1="'+sy(0)+'" y2="'+sy(0)+'" stroke="#9aa6ad"/><line x1="'+sx(0)+'" x2="'+sx(0)+'" y1="'+sy(lo)+'" y2="'+sy(hi)+'" stroke="#9aa6ad"/>';
+    s+='<line x1="'+sx(lo)+'" y1="'+sy(lo)+'" x2="'+sx(hi)+'" y2="'+sy(hi)+'" stroke="#9aa6ad" stroke-dasharray="6 6"/><text x="'+(sx(6.6))+'" y="'+(sy(7.2))+'" font-size="13" fill="#5f6c75">y = x</text>';
+    var p1="",p2="";for(var i=0;i<=200;i++){var t=lo+i/200*(hi-lo),e=Math.pow(b,t);if(e<=hi+1)p1+=(p1?"L":"M")+sx(t).toFixed(1)+" "+sy(Math.min(e,hi+1)).toFixed(1);var u=Math.pow(b,lo+i/200*(Math.log(hi)/Math.log(b)-lo));}
+    for(var j=1;j<=300;j++){var xx=j/300*hi;if(xx<=0)continue;var l=Math.log(xx)/Math.log(b);if(l<lo)continue;p2+=(p2?"L":"M")+sx(xx).toFixed(1)+" "+sy(l).toFixed(1)}
+    s+='<path d="'+p1+'" fill="none" stroke="#ef8020" stroke-width="3.5" stroke-linecap="round"/><path d="'+p2+'" fill="none" stroke="#0f7c86" stroke-width="3.5" stroke-linecap="round"/>';
+    if(y<=hi){s+='<line x1="'+sx(x)+'" y1="'+sy(y)+'" x2="'+sx(y)+'" y2="'+sy(x)+'" stroke="#10202f" stroke-dasharray="3 5"/><circle cx="'+sx(x)+'" cy="'+sy(y)+'" r="7" fill="#ef8020" stroke="#fff" stroke-width="2"/><circle cx="'+sx(y)+'" cy="'+sy(x)+'" r="7" fill="#0f7c86" stroke="#fff" stroke-width="2"/>'}
+    var bl=base==="e"?"e":base,ln=base==="e"?"ln":base==="10"?"log":"log₂";
+    s+='<text x="'+(W-m)+'" y="'+(m-8)+'" text-anchor="end" font-size="14" font-weight="700" fill="#ef8020">y = '+bl+'ˣ</text><text x="'+(W-m)+'" y="'+(m+12)+'" text-anchor="end" font-size="14" font-weight="700" fill="#0f7c86">y = '+ln+' x</text>';
+    svg.innerHTML=s;$("el-xo").textContent=fmt(x,1);$("el-y").textContent=y>=1000?fmt(y,0):fmt(y,2);$("el-yl").textContent=bl+"^"+fmt(x,1);$("el-l").textContent=fmt(x,1);$("el-ll").textContent=ln+" "+(y>=1000?fmt(y,0):fmt(y,2))+" = "+fmt(x,1)}
+  seg.addEventListener("click",function(e){var b=e.target.closest("button");if(!b)return;base=b.getAttribute("data-b");press(seg,b);draw()});xs.addEventListener("input",draw);
+  if(window.ResizeObserver)new ResizeObserver(function(){draw()}).observe(svg);draw()})();
+
+/* régua do rio */
+(function(){var svg=$("rio-svg"),hs=$("rio-h"),as=$("rio-alvo"),b=Math.log(31025/10942)/(13.54-7.5);function Q(h){return 10942*Math.exp(b*(h-7.5))}
+  function draw(){var W=Math.max(300,Math.round(svg.getBoundingClientRect().width)||600),H=Math.round(W*.62);svg.setAttribute("viewBox","0 0 "+W+" "+H);
+    var m={l:58,r:16,t:16,b:34},sx=function(v){return m.l+(v-6)/8*(W-m.l-m.r)},sy=function(v){return m.t+(36000-v)/36000*(H-m.t-m.b)},h=+hs.value,q=Q(h),alvo=+as.value,ha=7.5+Math.log(alvo/10942)/b,s="";
+    [0,10000,20000,30000].forEach(function(v){s+='<line x1="'+m.l+'" x2="'+(W-m.r)+'" y1="'+sy(v)+'" y2="'+sy(v)+'" stroke="#eef1f2"/><text x="'+(m.l-8)+'" y="'+(sy(v)+4)+'" text-anchor="end" font-size="12" fill="#5f6c75">'+(v?v/1000+" mil":"0")+'</text>'});
+    for(var k=6;k<=14;k+=2)s+='<text x="'+sx(k)+'" y="'+(H-10)+'" text-anchor="middle" font-size="12" fill="#5f6c75">'+k+' m</text>';
+    [[7.5,"alerta"],[8.5,"inundação"]].forEach(function(r,i){s+='<line x1="'+sx(r[0])+'" x2="'+sx(r[0])+'" y1="'+m.t+'" y2="'+(H-m.b)+'" stroke="#d9532f" stroke-dasharray="5 5" opacity=".7"/><text x="'+(sx(r[0])+4)+'" y="'+(m.t+12+i*16)+'" font-size="12" fill="#d9532f">'+r[1]+'</text>'});
+    var p="";for(var i=0;i<=160;i++){var hh=6+i/160*8;p+=(i?"L":"M")+sx(hh).toFixed(1)+" "+sy(Q(hh)).toFixed(1)}
+    s+='<path d="'+p+'L'+sx(14)+' '+sy(0)+'L'+sx(6)+' '+sy(0)+'Z" fill="#0f7c86" opacity=".1"/><path d="'+p+'" fill="none" stroke="#0f7c86" stroke-width="3.5"/>';
+    if(ha>=6&&ha<=14)s+='<line x1="'+m.l+'" x2="'+sx(ha)+'" y1="'+sy(alvo)+'" y2="'+sy(alvo)+'" stroke="#ef8020" stroke-width="2" stroke-dasharray="6 5"/><line x1="'+sx(ha)+'" x2="'+sx(ha)+'" y1="'+sy(alvo)+'" y2="'+(H-m.b)+'" stroke="#ef8020" stroke-width="2" stroke-dasharray="6 5"/><circle cx="'+sx(ha)+'" cy="'+sy(alvo)+'" r="6" fill="#ef8020"/>';
+    s+='<circle cx="'+sx(h)+'" cy="'+sy(q)+'" r="8" fill="#10202f" stroke="#fff" stroke-width="3"/>';
+    svg.innerHTML=s;$("rio-ho").textContent=fmt(h,2)+" m";$("rio-q").textContent=fmt(Math.round(q),0);$("rio-s").textContent=h<7.5?"Normal":h<8.5?"Alerta":"Inundação";
+    $("rio-ao").textContent=fmt(alvo,0)+" m³/s";$("rio-log").innerHTML="Com o logaritmo: h = 7,5 + ln("+fmt(alvo,0)+" ÷ 10.942) ÷ 0,1725 ≈ <b>"+fmt(ha,2)+" m</b>. Modelo didático com dois pontos, válido entre 7,5 m e 13,5 m."}
+  [hs,as].forEach(function(i){i.addEventListener("input",draw)});
+  svg.addEventListener("pointerdown",function(e){var r=svg.getBoundingClientRect(),W=+svg.getAttribute("viewBox").split(" ")[2],x=(e.clientX-r.left)/r.width*W;hs.value=Math.max(6,Math.min(14,6+(x-58)/(W-74)*8));draw()});
+  if(window.ResizeObserver)new ResizeObserver(function(){draw()}).observe(svg);draw()})();
+
+/* rolagem */
+(function(){var secs=[].slice.call(document.querySelectorAll("main>section")),nav=$("sidenav"),prog=$("prog");
+  secs.forEach(function(s){var a=document.createElement("a");a.href="#"+s.id;a.innerHTML="<span>"+s.getAttribute("data-label")+"</span>";a.setAttribute("aria-label",s.getAttribute("data-label"));nav.appendChild(a)});
+  var links=nav.children,px=[].slice.call(document.querySelectorAll(".px")),tick=false;
+  function frame(){tick=false;var y=scrollY,vh=innerHeight,dh=document.documentElement.scrollHeight-vh;prog.style.width=(dh>0?y/dh*100:0)+"%";
+    var cur=0;secs.forEach(function(s,i){if(s.offsetTop-vh*.4<=y)cur=i});Array.prototype.forEach.call(links,function(a,i){a.setAttribute("aria-current",i===cur?"true":"false")});
+    if(RM)return;px.forEach(function(e){e.style.transform="scale(1.08) translateY("+(y*.12).toFixed(1)+"px)"})}
+  addEventListener("scroll",function(){if(!tick){tick=true;requestAnimationFrame(frame)}},{passive:true});addEventListener("resize",frame);frame()})();
+</script>
+
+</body>
+</html>
