@@ -3,19 +3,19 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="description" content="Plano de aula El Niño · Modelagem Matemática: logaritmo e função exponencial com dados dos rios brasileiros.">
+<meta name="description" content="Plano de aula El Niño · Modelagem Matemática: funções exponenciais e logarítmicas com dados hidrológicos reais.">
 <title>El Niño · Modelagem Matemática</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700;800&family=Work+Sans:wght@400;500;700&family=Montserrat:wght@700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700;800&family=Work+Sans:wght@300;400;500;600;700&family=Montserrat:wght@700;800&display=swap">
 <style>
 /* Layout: página rolável no visual dos slides "El Niño · Modelagem Matemática". Fundo branco,
-   petróleo e azul-marinho com detalhes em laranja, formas inclinadas (paralelogramos de cantos
-   arredondados), gota d'água no canto de cada seção, cartões creme com borda colorida à esquerda.
-   Tema claro único, como nos slides. */
+   petróleo e azul-marinho com laranja de destaque, formas inclinadas de cantos arredondados,
+   gota d'água no canto das seções, cartões creme com borda colorida à esquerda, folhas e retícula
+   verde. Hierarquia: títulos em marinho, rótulos em laranja, ações em petróleo. Tema claro único. */
 :root{
-  --teal:#0f7c86; --teal-ink:#226670; --teal-2:#2a9aa1; --navy:#10202f; --orange:#ef8020; --coral:#d9532f;
-  --cream:#faf6f0; --line:#e8e0d4; --ink:#10202f; --text:#2b3a44; --mut:#5f6c75; --white:#ffffff;
+  --teal:#0f7c86; --teal-ink:#226670; --teal-2:#2a9aa1; --teal-soft:#e4f2f3; --navy:#10202f; --orange:#ef8020; --coral:#d9532f;
+  --green:#5b8a2a; --dot:#7d9b4e; --cream:#faf6f0; --line:#e8e0d4; --gray:#ececec; --ink:#10202f; --text:#2b3a44; --mut:#5f6c75; --white:#ffffff;
   --f-title:"Poppins","Montserrat","Segoe UI",sans-serif;
   --f-body:"Work Sans","Segoe UI",system-ui,sans-serif;
   --f-label:"Montserrat","Poppins",sans-serif;
@@ -31,41 +31,33 @@ img{max-width:100%;display:block}
 .wrap{max-width:1200px;margin:0 auto;padding-left:max(20px,env(safe-area-inset-left,0px));padding-right:max(20px,env(safe-area-inset-right,0px));position:relative}
 section{position:relative;overflow:hidden}
 .pad{padding-block:clamp(64px,8vw,112px)}
-
-/* gota d'água no canto, como em todos os slides */
 .drop{position:absolute;left:max(20px,4vw);top:clamp(16px,2.6vw,30px);width:34px;height:40px;z-index:3}
+.leaf{position:absolute;pointer-events:none;z-index:2;will-change:transform}
+.dots{position:absolute;pointer-events:none;background-image:radial-gradient(circle,var(--dot) 1.5px,transparent 2px);background-size:18px 18px;opacity:.6}
+.dots.tr{top:0;right:0;width:40%;height:380px;-webkit-mask-image:radial-gradient(ellipse at 100% 0,#000 0,transparent 70%);mask-image:radial-gradient(ellipse at 100% 0,#000 0,transparent 70%)}
+.dots.br{bottom:0;right:0;width:36%;height:380px;-webkit-mask-image:radial-gradient(ellipse at 100% 100%,#000 0,transparent 70%);mask-image:radial-gradient(ellipse at 100% 100%,#000 0,transparent 70%)}
 
-/* tipografia */
-.h2{font:700 clamp(36px,4.6vw,58px)/1.1 var(--f-title);color:var(--ink);margin:0 0 14px;letter-spacing:-.01em;text-wrap:balance}
-.eyebrow{font:700 13px/1 var(--f-label);letter-spacing:.24em;text-transform:uppercase;color:var(--orange);margin:0 0 12px}
-.sub{font-size:clamp(16px,1.5vw,19px);color:var(--text);margin:0 0 28px;max-width:56ch}
-.num{font:700 clamp(30px,3vw,40px)/1 var(--f-title);color:var(--coral)}
-
-/* campos a preencher do modelo */
-.ph{font-style:normal;color:var(--mut);background:transparent;border-radius:4px;transition:background .2s ease,box-shadow .2s ease}
+/* tipografia: um só sistema de títulos (marinho), rótulos em laranja */
+.h2{font:700 clamp(34px,4.4vw,56px)/1.08 var(--f-title);color:var(--ink);margin:0 0 14px;letter-spacing:-.01em;text-wrap:balance}
+.h2.up{text-transform:uppercase;font-weight:800;letter-spacing:0}
+.eyebrow{font:800 13px/1 var(--f-label);letter-spacing:.24em;text-transform:uppercase;color:var(--orange);margin:0 0 12px}
+.sub{font-size:clamp(16px,1.5vw,19px);color:var(--text);margin:0 0 26px;max-width:62ch}
+.k{font:700 13px/1.2 var(--f-label);letter-spacing:.06em;text-transform:uppercase;color:var(--teal)}
+.ph{font-style:normal;color:var(--mut);border-radius:4px;transition:background .2s ease,box-shadow .2s ease}
 body.show-ph .ph{background:#fff1c9;box-shadow:0 0 0 2px #f3c44f;color:#6b4c00}
 
-/* formas inclinadas */
+/* formas */
 .slant{border-radius:28px;overflow:hidden;transform:skewX(-12deg)}
 .slant>img{width:120%;height:100%;object-fit:cover;transform:skewX(12deg) translateX(-8%)}
-.bar{position:absolute;border-radius:16px;transform:skewX(-12deg);z-index:2}
-.tag{display:inline-flex;align-items:center;justify-content:center;min-width:240px;padding:10px 34px;font:800 18px/1.2 var(--f-title);color:#fff;background:var(--navy);clip-path:polygon(9% 0,86% 0,100% 100%,0 100%,0 100%);border-radius:14px 14px 4px 4px}
-.tag.teal{background:var(--teal)}.tag.orange{background:var(--orange)}
-.tag.light{background:var(--white);color:var(--ink)}
-
-/* cartões creme com borda colorida */
+.ptag{display:inline-flex;align-items:center;justify-content:center;padding:10px 30px;font:700 15px/1.25 var(--f-title);color:#fff;background:var(--teal);clip-path:polygon(0 0,90% 0,100% 100%,10% 100%);text-align:center}
 .ccard{background:var(--cream);border:1px solid var(--line);border-left:6px solid var(--teal);border-radius:10px;padding:18px 22px;min-width:0}
 .ccard.o{border-left-color:var(--orange)}.ccard.c{border-left-color:var(--coral)}
-.ccard h3{font:700 19px/1.3 var(--f-title);color:var(--ink);margin:0 0 6px}
+.ccard h3{font:700 18px/1.3 var(--f-title);color:var(--ink);margin:0 0 6px}
 .ccard p{margin:0;font-size:16px;color:var(--text)}
-.ccard.btn{display:block;width:100%;text-align:left;font:inherit;cursor:pointer;transition:transform .2s ease,box-shadow .2s ease}
-.ccard.btn:hover{transform:translateY(-3px);box-shadow:0 10px 24px rgba(16,32,47,.08)}
-
-/* botões */
 .btn-p{display:inline-flex;align-items:center;gap:10px;border:0;border-radius:999px;padding:13px 24px;font:700 16px/1 var(--f-title);text-decoration:none;cursor:pointer;background:var(--teal);color:#fff;transition:background .2s ease}
 .btn-p:hover{background:#0b636b}
-.btn-p.o{background:var(--orange)}.btn-p.o:hover{background:#d06a10}
 .btn-p.ghost{background:transparent;color:var(--teal);box-shadow:inset 0 0 0 2px var(--teal)}
+.btn-p.ghost:hover{background:var(--teal-soft)}
 .seg{display:inline-flex;background:var(--cream);border:1px solid var(--line);border-radius:999px;padding:4px;gap:4px;flex-wrap:wrap}
 .seg button{border:0;background:transparent;border-radius:999px;padding:9px 18px;font:700 15px/1.2 var(--f-title);color:var(--text);cursor:pointer;min-height:40px}
 .seg button[aria-pressed=true]{background:var(--teal);color:#fff}
@@ -86,131 +78,133 @@ body.show-ph .ph{background:#fff1c9;box-shadow:0 0 0 2px #f3c44f;color:#6b4c00}
 .hero{min-height:clamp(560px,56vw,760px);padding:0}
 .hero .earth{position:absolute;left:-4%;top:10%;bottom:0;width:58%;border-radius:0 40px 0 0;overflow:hidden;clip-path:polygon(0 0,82% 0,100% 100%,0 100%)}
 .hero .earth img{width:100%;height:100%;object-fit:cover;will-change:transform}
-.hero .teal{position:absolute;right:0;top:0;bottom:12%;left:42%;background:var(--teal);border-radius:40px 0 0 40px;clip-path:polygon(0 0,100% 0,100% 100%,16% 100%);transform-origin:right}
-.hero .white{position:absolute;left:18%;right:0;top:19%;height:36%;background:var(--white);border-radius:24px 0 0 24px;clip-path:polygon(0 0,100% 0,100% 100%,11% 100%);display:flex;align-items:center;justify-content:flex-end;padding-right:6%}
+.hero .teal{position:absolute;right:0;top:0;bottom:6%;left:42%;background:var(--teal);border-radius:40px 0 0 40px;clip-path:polygon(0 0,100% 0,100% 100%,16% 100%)}
+.hero .course{position:absolute;right:6%;top:4%;text-align:center;color:#fff;font:700 clamp(11px,1.1vw,15px)/1.5 var(--f-label);letter-spacing:.04em;text-transform:uppercase}
+.hero .course span{display:block;font-weight:500;font-family:var(--f-body)}
+.hero .white{position:absolute;left:18%;right:0;top:19%;height:32%;background:var(--white);border-radius:24px 0 0 24px;clip-path:polygon(0 0,100% 0,100% 100%,11% 100%);display:flex;align-items:center;justify-content:flex-end;padding-right:6%}
 .hero h1{margin:0;font:800 clamp(64px,13vw,190px)/1 var(--f-title);color:var(--teal-ink);letter-spacing:.01em;white-space:nowrap}
-.hero .meta{position:absolute;left:58%;right:6%;top:60%;text-align:center;color:#fff}
-.hero .meta p{font:500 clamp(14px,1.6vw,20px)/1.2 var(--f-body);letter-spacing:.12em;text-transform:uppercase;margin:0 0 clamp(18px,3vw,42px)}
-.hero .pill{display:inline-block;background:#fff;color:var(--navy);font:700 clamp(14px,1.4vw,18px)/1 var(--f-title);padding:14px clamp(40px,6vw,90px);clip-path:polygon(0 0,86% 0,100% 100%,14% 100%);text-decoration:none}
+.hero .team{position:absolute;left:60%;right:4%;top:56%;color:#fff;text-align:center;font:400 clamp(13px,1.3vw,17px)/1.55 var(--f-body);letter-spacing:.03em}
+.hero .team span{display:block}
+.hero .pill{position:absolute;left:62%;bottom:9%;display:inline-block;background:#fff;color:var(--teal-ink);font:800 clamp(12px,1.2vw,15px)/1 var(--f-label);letter-spacing:.06em;padding:14px clamp(40px,6vw,90px);clip-path:polygon(0 0,86% 0,100% 100%,14% 100%);text-decoration:none;text-transform:uppercase}
 .hero .pill:hover{background:var(--cream)}
 @media (max-width:760px){
-  .hero{min-height:0;padding:72px 0 0}
-  .hero .earth{position:relative;left:0;top:0;width:100%;height:240px;clip-path:none;border-radius:0}
-  .hero .teal{position:absolute;left:0;top:auto;bottom:0;height:200px;clip-path:none;border-radius:0}
-  .hero .white{position:relative;left:0;top:0;height:auto;clip-path:none;border-radius:0;padding:12px 20px;justify-content:center}
+  .hero{min-height:0;padding:64px 0 0}
+  .hero .earth{position:relative;left:0;top:0;width:100%;height:220px;clip-path:none;border-radius:0}
+  .hero .teal{position:absolute;left:0;top:auto;bottom:0;height:420px;clip-path:none;border-radius:0}
+  .hero .course{position:relative;right:auto;top:auto;color:var(--teal-ink);padding:0 20px 10px}
+  .hero .white{position:relative;left:0;top:0;height:auto;clip-path:none;border-radius:0;padding:6px 20px;justify-content:center}
   .hero h1{font-size:18vw}
-  .hero .meta{position:relative;left:0;right:0;top:0;padding:28px 20px 40px;z-index:2}
+  .hero .team{position:relative;left:0;right:0;top:0;padding:26px 20px 14px;z-index:2}
+  .hero .pill{position:relative;left:auto;bottom:auto;margin:0 auto 36px;display:table;z-index:2}
 }
 
 /* 2 · visão geral */
-.over{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center}
-.over .cards{display:grid;gap:14px}
-.over .ccard{border-left-color:var(--orange)}
-.over .ccard h3{font-size:16px;letter-spacing:.02em}
-.over .pic{position:relative;height:clamp(360px,42vw,560px)}
-.over .pic .slant{position:absolute;inset:0 0 0 12%}
-.over .pic .bar{left:2%;top:4%;bottom:10%;width:22px;background:var(--orange)}
-@media (max-width:900px){.over{grid-template-columns:1fr}.over .pic{height:320px;order:-1}}
+.facts{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin:8px 0 22px}
+.fact{background:var(--cream);border:1px solid var(--line);border-top:5px solid var(--teal);border-radius:10px;padding:14px 16px;min-width:0}
+.fact.o{border-top-color:var(--orange)}
+.fact b{display:block;font:700 clamp(20px,2vw,26px)/1.15 var(--f-title);color:var(--ink);margin-top:4px}
+.fact span.x{font-size:14px;color:var(--mut)}
+.tema{font-size:clamp(17px,1.6vw,20px);margin:0 0 18px;max-width:75ch}
+.problem{background:var(--navy);color:#dde9eb;border-radius:24px;padding:24px 28px;margin-bottom:22px}
+.problem .k{color:var(--orange)}
+.problem p{margin:8px 0 0;font-size:clamp(17px,1.6vw,20px);line-height:1.55}
+.problem b{color:#fff}
+.box{position:relative;background:var(--gray);border-radius:26px;padding:28px clamp(18px,3vw,36px);text-align:center}
+.box::before{content:"";position:absolute;left:-1px;top:-1px;width:64px;height:42px;background:var(--white);border-bottom-right-radius:22px}
+.box::after{content:"";position:absolute;left:16px;top:-8px;width:30px;height:30px;border-radius:50%;background:var(--orange)}
+.box .cts{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin:8px 0 22px}
+.box p{max-width:80ch;margin:0 auto;font-size:clamp(16px,1.6vw,19px)}
+.upper{font:700 16px/1.2 var(--f-title);text-transform:uppercase;color:var(--ink);margin:0 0 10px}
+.over-earth{position:absolute;left:50%;bottom:-200px;transform:translateX(-50%);width:min(46vw,480px);opacity:.95;pointer-events:none}
+@media (max-width:860px){.facts{grid-template-columns:repeat(2,minmax(0,1fr))}}
 
-/* 3 · habilidades */
-.hab{display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:center}
-.hab .pic{position:relative;height:clamp(420px,48vw,620px)}
-.hab .pic .slant{position:absolute;inset:0 8% 0 8%}
-.hab .pic .b1{left:16%;top:42%;height:40%;width:60px;background:var(--teal)}
-.hab .pic .b2{right:6%;top:14%;height:42%;width:66px;background:var(--orange)}
-.hab .pic canvas{position:absolute;inset:0 8%;width:84%;height:100%;pointer-events:none}
-.hab-list{display:grid;gap:26px;margin-top:24px}
-.hab-item button{border:0;background:none;padding:0;cursor:pointer;text-align:left;font:inherit}
-.hab-item p{margin:10px 0 0;font-size:17px}
-.hab-item .more{display:none;margin-top:8px;font-size:15px;color:var(--mut)}
-.hab-item.open .more{display:block}
-.hab-item .tag{transition:transform .2s ease}
-.hab-item button:hover .tag{transform:translateX(6px)}
-@media (max-width:900px){.hab{grid-template-columns:1fr}.hab .pic{height:300px}}
+/* 3 · objetivos e recursos */
+.objr{display:grid;grid-template-columns:1.25fr 1fr;gap:40px;align-items:start}
+.olist{background:var(--cream);border:1px solid var(--line);border-left:12px solid var(--teal);border-radius:6px;padding:10px 24px 14px;margin:0;list-style:none;counter-reset:o}
+.olist li{counter-increment:o;position:relative;padding:12px 0 12px 40px;border-bottom:1px solid var(--line);font-size:16px}
+.olist li:last-child{border-bottom:0}
+.olist li::before{content:counter(o,decimal-leading-zero);position:absolute;left:0;top:12px;font:800 14px/1.6 var(--f-label);color:var(--orange)}
+.olist li.key{color:var(--teal-ink);font-weight:600}
+.olist.only-key li:not(.key){display:none}
+.res-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
+.res{display:flex;flex-direction:column;align-items:center;text-align:center;gap:10px;text-decoration:none;color:var(--text);border-radius:18px;padding:10px;transition:background .2s ease}
+.res img{width:min(130px,100%);aspect-ratio:138/128;border-radius:22px;object-fit:cover}
+.res span{font-size:15px;line-height:1.35}
+a.res:hover{background:var(--teal-soft)}
+a.res span b{color:var(--teal)}
+@media (max-width:900px){.objr{grid-template-columns:1fr}}
 
-/* 4 · competências */
-.comp{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center}
-.comp .items{display:grid;gap:26px;margin-top:22px}
-.comp .it{display:grid;grid-template-columns:64px 1fr;gap:6px 14px;align-items:baseline}
-.comp .it h3{font:700 19px/1.3 var(--f-title);color:var(--ink);margin:0}
-.comp .it p{grid-column:2;margin:0;font-size:16px}
-.comp .tiles{position:relative;height:clamp(380px,40vw,520px)}
-.comp .tiles .slant{position:absolute}
-.comp .tiles .t1{left:6%;top:0;width:76%;height:52%}
-.comp .tiles .t2{right:0;bottom:0;width:62%;height:58%}
-@media (max-width:900px){.comp{grid-template-columns:1fr}.comp .tiles{height:320px}}
-
-/* 5/6 · BNCC */
+/* 4/5 · BNCC */
 .bncc{border-left:12px solid var(--teal)}
-.bncc-grid{display:grid;gap:14px;max-width:880px}
-.bncc-3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}
-.bncc-3 .ccard{min-height:220px}
-@media (max-width:860px){.bncc-3{grid-template-columns:1fr}.bncc-3 .ccard{min-height:0}}
+.grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+.grid3 .ccard h3{font:700 13px/1.3 var(--f-label);letter-spacing:.04em;color:var(--mut);text-transform:uppercase;margin-bottom:10px}
+.grid3 .ccard p{font-size:17px}
+.grid3 .ccard p b{color:var(--ink)}
+.code{display:inline-block;background:var(--navy);color:#fff;font:700 14px/1 var(--f-title);padding:8px 16px;border-radius:999px;margin-bottom:10px}
+.hfilter{margin:0 0 20px}
+.hab-card{transition:opacity .25s ease,transform .25s ease}
+.hab-card.dim{opacity:.28}
+.hab-card.hi{transform:translateY(-3px);box-shadow:0 10px 24px rgba(16,32,47,.08)}
+.comp-art{position:absolute;right:-30px;bottom:-30px;width:min(30vw,340px);pointer-events:none}
+.comp-art .slant{height:220px}
+@media (max-width:900px){.grid3{grid-template-columns:1fr}.comp-art{display:none}}
+
+/* 6 · metodologia */
+.met{display:grid;grid-template-columns:1.25fr 1fr;gap:32px;align-items:start}
+.met-main{background:var(--teal);color:#e6f3f4;border-radius:22px;padding:26px 28px}
+.met-main .k{color:#ffd8b0}
+.met-main p{margin:6px 0 16px;font-size:16px}
+.steps{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
+.steps button{border:0;border-radius:14px;padding:12px;background:rgba(255,255,255,.12);color:#fff;text-align:left;cursor:pointer;font:inherit;min-height:84px}
+.steps button b{display:block;color:#fff;font:800 24px/1 var(--f-title);margin-bottom:6px}
+.steps button span{font:600 14px/1.25 var(--f-body)}
+.steps button[aria-pressed=true]{background:#fff;color:var(--teal-ink)}
+.steps button[aria-pressed=true] b{color:var(--orange)}
+.step-out{margin-top:12px;background:rgba(0,0,0,.15);border-radius:14px;padding:14px 16px;min-height:96px;font-size:16px}
+.step-out b{color:#fff;display:block;margin-bottom:4px}
+.met-side{display:grid;gap:14px}
+.gbox{background:var(--gray);border-radius:22px;padding:20px 24px}
+.gbox h3{font:700 16px/1.2 var(--f-title);text-transform:uppercase;color:var(--ink);margin:0 0 8px}
+.gbox p,.gbox li{font-size:16px;margin:0}
+.gbox ul{margin:0;padding-left:20px}
+@media (max-width:900px){.met{grid-template-columns:1fr}.steps{grid-template-columns:repeat(2,minmax(0,1fr))}}
 
 /* 7 · cronograma */
-.timeline{position:relative;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:18px;margin-top:30px}
+.tbar{display:flex;height:46px;border-radius:12px;overflow:hidden;margin:6px 0 4px}
+.tbar button{border:0;color:#fff;font:700 14px/1 var(--f-title);cursor:pointer;transition:filter .2s ease;padding:0 8px;white-space:nowrap;overflow:hidden}
+.tbar button:hover{filter:brightness(1.1)}
+.tbar button[aria-pressed=true]{box-shadow:inset 0 -6px 0 rgba(255,255,255,.75)}
+.tscale{display:flex;justify-content:space-between;font-size:13px;color:var(--mut);margin-bottom:26px}
+.timeline{position:relative;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:18px}
 .timeline::before{content:"";position:absolute;left:12.5%;right:12.5%;top:58px;height:2px;background:#c8d3d6}
 .aula{border:0;background:none;padding:0;text-align:center;cursor:pointer;font:inherit;color:inherit}
 .aula .lbl{display:block;font:700 18px/1.2 var(--f-title);color:var(--ink);margin-bottom:16px}
 .aula .dot{display:block;width:26px;height:26px;margin:0 auto 22px;border-radius:50%;background:var(--teal);border:5px solid var(--white);box-shadow:0 0 0 2px var(--teal);position:relative;z-index:1;transition:transform .2s ease}
 .aula:last-child .dot{background:var(--orange);box-shadow:0 0 0 2px var(--orange)}
-.aula .ccard{display:block;text-align:left;min-height:160px}
+.aula .ccard{display:flex;flex-direction:column;text-align:left;min-height:210px}
 .aula:last-child .ccard{border-left-color:var(--orange)}
+.aula .ccard h3{font-size:17px}
+.aula .min{font:800 22px/1 var(--f-title);color:var(--teal);margin:8px 0}
+.aula:last-child .min{color:var(--orange)}
+.aula .bloom{margin-top:auto;font-size:13px;color:var(--mut)}
 .aula[aria-pressed=true] .dot{transform:scale(1.35)}
 .aula[aria-pressed=true] .ccard{box-shadow:0 0 0 3px var(--teal);background:#fff}
 .aula:last-child[aria-pressed=true] .ccard{box-shadow:0 0 0 3px var(--orange)}
-.aula-detail{margin-top:22px;background:var(--navy);color:#fff;border-radius:22px;padding:22px 26px;display:grid;grid-template-columns:auto 1fr;gap:6px 22px;align-items:center}
+.aula-detail{margin-top:22px;background:var(--navy);color:#fff;border-radius:22px;padding:20px 26px;display:grid;grid-template-columns:auto 1fr auto;gap:4px 22px;align-items:center}
 .aula-detail .n{font:800 46px/1 var(--f-title);color:var(--orange);grid-row:span 2}
-.aula-detail h3{font:700 22px/1.2 var(--f-title);margin:0;color:#fff}
-.aula-detail p{margin:0;color:#cfe3e6}
-.aula-detail .ph{color:#9fb7bc}
-@media (max-width:860px){.timeline{grid-template-columns:repeat(2,minmax(0,1fr))}.timeline::before{display:none}}
+.aula-detail h3{font:700 21px/1.25 var(--f-title);margin:0;color:#fff}
+.aula-detail p{margin:0;color:#cfe3e6;font-size:16px}
+.aula-detail .mm{grid-row:span 2;font:800 30px/1 var(--f-title);color:#fff;text-align:right}
+.aula-detail .mm small{display:block;font:500 13px/1.2 var(--f-body);color:#9fb7bc}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.chips span{border-radius:999px;background:rgba(255,255,255,.12);padding:4px 10px;font-size:13px;color:#e6f3f4}
+@media (max-width:860px){.timeline{grid-template-columns:repeat(2,minmax(0,1fr))}.timeline::before{display:none}.aula-detail{grid-template-columns:auto minmax(0,1fr);padding:18px}.aula-detail .mm{grid-row:auto;grid-column:2;text-align:left;font-size:24px}.aula-detail .n{font-size:36px}}
 
-/* 8 · tempo e divisão */
-.tempo{display:grid;grid-template-columns:1.2fr 1fr;gap:44px;align-items:center}
-.tempo .pic{position:relative}
-.tempo .pic .shape{border-radius:30px;overflow:hidden;clip-path:polygon(6% 0,100% 0,100% 100%,0 100%,0 62%,10% 62%,10% 8%);aspect-ratio:16/8}
-.tempo .pic .shape img{width:100%;height:100%;object-fit:cover}
-.tempo .strip{margin-top:16px;background:var(--teal);color:#fff;border-radius:6px;padding:16px 20px;font-size:15px}
-.tempo .tags{display:grid;gap:14px;margin-top:24px}
-.tempo .ptag{display:block;padding:20px 40px;color:#fff;font-size:15px;clip-path:polygon(0 0,86% 0,100% 100%,14% 100%);background:var(--teal)}
-.tempo .ptag.o{background:var(--orange)}
-.calc{margin-top:24px;background:var(--cream);border:1px solid var(--line);border-radius:18px;padding:18px 20px}
-.calc label{display:flex;justify-content:space-between;font:600 15px/1.2 var(--f-body);color:var(--ink);margin:10px 0 4px}
-.calc output{color:var(--teal);font-weight:700}
-.calc input{width:100%;accent-color:var(--teal)}
-.calc .bars{display:flex;height:34px;border-radius:8px;overflow:hidden;margin-top:14px}
-.calc .bars span{display:grid;place-items:center;color:#fff;font:700 12px/1 var(--f-body);transition:flex .3s ease}
-.calc .tot{margin-top:10px;font-size:15px}
-@media (max-width:900px){.tempo{grid-template-columns:1fr}}
-
-/* 9 · atividades */
-.ativ{display:grid;grid-template-columns:1fr 1.1fr;gap:40px;align-items:center}
-.moments{display:grid;gap:22px;margin-top:22px}
-.moment p{margin:10px 0 0}
-.ativ .art{position:relative;height:clamp(420px,46vw,600px)}
-.ativ .art .slant{position:absolute}
-.ativ .art .a1{left:10%;top:0;width:44%;height:70%}
-.ativ .art .a2{left:30%;top:16%;width:44%;height:52%;background:var(--navy)}
-.ativ .art .a3{right:0;bottom:0;width:46%;height:70%}
-@media (max-width:900px){.ativ{grid-template-columns:1fr}.ativ .art{height:340px}}
-
-/* 10 · aplicação */
-.apl-top{display:grid;grid-template-columns:1fr 1fr 1.4fr;gap:28px;align-items:start}
-.apl-top h3{font:700 19px/1.3 var(--f-title);color:var(--ink);margin:0 0 6px}
-.apl-top p{margin:0;font-size:16px}
-.apl-art{position:relative;margin-top:36px;height:clamp(320px,34vw,440px)}
-.apl-art .slant{position:absolute;left:4%;top:0;width:66%;height:100%}
-.apl-art .box{position:absolute;right:0;top:22%;width:44%;background:var(--navy);color:#e4eef0;padding:26px 34px;border-radius:24px;transform:skewX(-12deg);font-size:16px}
-.apl-art .box>div{transform:skewX(12deg)}
-.apl-art .box .ph{color:#9fb7bc}
-@media (max-width:900px){.apl-top{grid-template-columns:1fr}.apl-art{height:auto}.apl-art .slant{position:relative;left:0;width:100%;height:240px}.apl-art .box{position:relative;width:auto;transform:none;margin-top:14px}.apl-art .box>div{transform:none}}
-
-/* laboratórios */
-.lab{background:var(--cream);border:1px solid var(--line);border-radius:28px;padding:clamp(18px,2.6vw,30px);margin-top:28px}
+/* missões (prévia interativa) */
+.lab{background:var(--cream);border:1px solid var(--line);border-radius:28px;padding:clamp(18px,2.6vw,30px);margin-top:24px}
 .lab-head{display:flex;justify-content:space-between;align-items:flex-start;gap:14px;flex-wrap:wrap;margin-bottom:12px}
 .lab-head h3{font:700 22px/1.25 var(--f-title);color:var(--ink);margin:0}
-.lab-head .tagx{display:inline-block;background:var(--navy);color:#fff;border-radius:999px;padding:6px 12px;font:700 12px/1 var(--f-label);letter-spacing:.12em;text-transform:uppercase}
+.tagx{display:inline-block;background:var(--navy);color:#fff;border-radius:999px;padding:6px 12px;font:700 12px/1 var(--f-label);letter-spacing:.12em;text-transform:uppercase}
 .lab-grid{display:grid;grid-template-columns:1.5fr 1fr;gap:24px;align-items:start}
 .lab svg{display:block;width:100%;height:auto;background:#fff;border-radius:18px;touch-action:pan-y}
 .lab svg text{font-family:var(--f-body)}
@@ -222,35 +216,47 @@ body.show-ph .ph{background:#fff1c9;box-shadow:0 0 0 2px #f3c44f;color:#6b4c00}
 .readout b{display:block;font:800 24px/1.1 var(--f-title);color:var(--teal);font-variant-numeric:tabular-nums}
 .readout span{font-size:13px;color:var(--mut)}
 .note{font-size:14px;color:var(--mut);margin:12px 0 0}
+.goto{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-top:22px}
 @media (max-width:900px){.lab-grid{grid-template-columns:1fr}}
 
-/* 11 · avaliação e recursos */
-.aval{display:grid;grid-template-columns:1fr 1fr;gap:44px;align-items:center}
-.aval .items{display:grid;gap:30px;margin-top:22px}
-.aval .art{position:relative;height:clamp(420px,46vw,600px)}
-.aval .art .slant{position:absolute;inset:0 0 0 14%}
-@media (max-width:900px){.aval{grid-template-columns:1fr}.aval .art{height:300px}}
+/* 8 · avaliação */
+.aval-t{display:grid;grid-template-columns:minmax(200px,.6fr) 1.4fr;border:2px solid var(--teal);border-radius:8px;overflow:hidden}
+.aval-t .lbl{background:#2e5f66;color:#fff;display:flex;align-items:center;justify-content:center;text-align:center;padding:20px;font:700 15px/1.3 var(--f-title);text-transform:uppercase;letter-spacing:.04em}
+.aval-t .lbl.b{background:var(--teal)}
+.aval-t .cell{padding:16px 20px;border-bottom:2px solid var(--teal)}
+.aval-t .cell:last-child{border-bottom:0}
+.aval-t .lbl:nth-of-type(1){border-bottom:2px solid #fff}
+.crit{display:grid;gap:4px}
+.crit button{display:flex;gap:10px;align-items:flex-start;text-align:left;border:0;background:transparent;border-radius:10px;padding:7px 8px;cursor:pointer;font:inherit;font-size:16px;color:var(--text)}
+.crit button:hover{background:var(--cream)}
+.crit .bx{flex:none;width:22px;height:22px;border-radius:6px;border:2px solid var(--teal);display:grid;place-items:center;font:800 12px/1 var(--f-body);color:#fff;margin-top:2px}
+.crit button[aria-pressed=true] .bx{background:var(--teal)}
+.crit button[aria-pressed=true]{color:var(--ink)}
+.res-list{margin:0;padding-left:20px}.res-list li{margin:5px 0;font-size:16px}
+.meter{display:flex;align-items:center;gap:12px;font:600 14px/1 var(--f-body);color:var(--ink);margin-top:10px}
+.meter .bar{flex:1;height:8px;border-radius:4px;background:var(--gray);overflow:hidden}
+.meter .bar i{display:block;height:100%;width:0;background:var(--teal);transition:width .3s ease}
+@media (max-width:760px){.aval-t{grid-template-columns:1fr}.aval-t .lbl{justify-content:flex-start}}
 
-/* 12 · referências */
-.refs{border-left:12px solid var(--teal)}
+/* 9 · referências */
 .refs ul{margin:12px 0 0;padding-left:22px;max-width:900px}
 .refs li{margin:8px 0;font-size:18px}
 
-/* 13 · obrigado */
-.thanks{min-height:clamp(560px,56vw,760px)}
+/* 10 · obrigado + QR */
+.thanks{min-height:clamp(520px,50vw,700px)}
 .thanks h2{font:800 clamp(52px,8vw,110px)/1 var(--f-title);color:var(--teal-ink);margin:0;letter-spacing:.02em}
-.thanks .t1{position:absolute;left:6%;bottom:10%;width:44%;height:42%}
+.thanks .t1{position:absolute;left:6%;bottom:8%;width:44%;height:44%}
 .thanks .t2{position:absolute;right:8%;top:14%;width:34%;height:50%}
 .thanks .slant{width:100%;height:100%}
-@media (max-width:760px){.thanks .t1,.thanks .t2{position:relative;left:auto;right:auto;top:auto;bottom:auto;width:auto;height:220px;margin-top:24px}}
-
-/* QR */
-.qr .h2{text-align:center}
-.qr .sub{text-align:center;margin:0 auto 30px}
-.qr-card{max-width:380px;margin:0 auto;background:var(--cream);border:1px solid var(--line);border-left:6px solid var(--teal);border-radius:16px;padding:26px;text-align:center}
-.qr-card img{width:100%;max-width:280px;aspect-ratio:1;margin:0 auto 14px;background:#fff;border-radius:14px;padding:10px}
+@media (max-width:760px){.thanks .t1,.thanks .t2{position:relative;left:auto;right:auto;top:auto;bottom:auto;width:auto;height:200px;margin:24px 20px 0}}
+.qr .h2,.qr .sub{text-align:center}.qr .sub{margin:0 auto 30px}
+.qr-grid{display:grid;grid-template-columns:repeat(2,minmax(0,340px));gap:24px;justify-content:center}
+.qr-card{background:var(--cream);border:1px solid var(--line);border-left:6px solid var(--teal);border-radius:16px;padding:24px;text-align:center}
+.qr-card.o{border-left-color:var(--orange)}
+.qr-card img{width:100%;max-width:260px;aspect-ratio:1;margin:0 auto 14px;background:#fff;border-radius:14px;padding:10px}
 .qr-card h3{font:700 20px/1.2 var(--f-title);color:var(--teal);margin:0 0 6px}
 .qr-card a{font-size:15px;color:var(--text);word-break:break-all}
+@media (max-width:640px){.qr-grid{grid-template-columns:minmax(0,340px)}}
 </style>
 <style>[hidden]{display:none!important}</style>
 </head>
@@ -260,174 +266,162 @@ body.show-ph .ph{background:#fff1c9;box-shadow:0 0 0 2px #f3c44f;color:#6b4c00}
 <div class="progress" aria-hidden="true"><i id="prog"></i></div>
 <nav class="sidenav" id="sidenav" aria-label="Seções"></nav>
 <button type="button" class="phbtn" id="phbtn" aria-pressed="false">Destacar campos a preencher (<span id="phn">0</span>)</button>
-
 <svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs><symbol id="gota" viewBox="0 0 34 40"><path d="M17 2C17 2 32 18 32 26.5A15 15 0 0 1 2 26.5C2 18 17 2 17 2Z" fill="#0f7c86"/></symbol></defs></svg>
 
 <main>
 <!-- 1 · CAPA -->
 <section class="hero" id="inicio" data-label="Capa">
   <svg class="drop" aria-hidden="true"><use href="#gota"/></svg>
-  <div class="earth"><img class="px" data-px="1" src="assets/terra-sst.webp" alt="Imagem de satélite das Américas com a mancha quente do El Niño no Pacífico" width="1200" height="768"></div>
+  <div class="earth"><img class="px" src="assets/terra-sst.webp" alt="Imagem de satélite das Américas com a mancha quente do El Niño no Pacífico" width="1200" height="768"></div>
   <div class="teal" aria-hidden="true"></div>
+  <p class="course">Práticas de Ensino de Matemática III<span>Profª. Drª. Joelma Iamac Nomura</span></p>
   <div class="white"><h1>EL NIÑO</h1></div>
-  <div class="meta"><p>Modelagem Matemática</p><a class="pill" href="#visao-geral">Plano de aula</a></div>
+  <div class="team" aria-label="Integrantes"><span>Ana Carolina, 11202021712</span><span>Camila Lourenço, 11202020794</span><span>Gabriel Matos, 11202321111</span><span>Júlia Campos, 11202421058</span><span>Kauan Franca, 11202422220</span></div>
+  <a class="pill" href="#visao-geral">Modelagem Matemática</a>
 </section>
 
 <!-- 2 · VISÃO GERAL -->
-<section class="pad" id="visao-geral" data-label="Visão geral do plano">
-  <svg class="drop" aria-hidden="true"><use href="#gota"/></svg>
-  <div class="wrap over">
-    <div>
-      <h2 class="h2">Visão geral do plano</h2>
-      <div class="cards">
-        <div class="ccard"><h3>Tema</h3><p>Logaritmo e função exponencial</p></div>
-        <div class="ccard"><h3>Duração total</h3><p><i class="ph">[nº de aulas × minutos]</i></p></div>
-        <div class="ccard"><h3>Turma / série</h3><p><i class="ph">[ex.: 1º ano do Ensino Médio]</i></p></div>
-        <div class="ccard"><h3>Outro</h3><p><i class="ph">[seu nome]</i></p></div>
-      </div>
+<section class="pad" id="visao-geral" data-label="Visão geral do plano" style="padding-bottom:clamp(160px,18vw,240px)">
+  <img class="leaf" data-float="1" src="assets/leaf.webp" alt="" aria-hidden="true" style="right:3%;top:10px;width:min(12vw,140px);transform:rotate(18deg)">
+  <img class="leaf" data-float="-1" src="assets/leaf-blur.webp" alt="" aria-hidden="true" style="left:1%;bottom:12%;width:min(10vw,120px)">
+  <div class="dots br" aria-hidden="true"></div>
+  <div class="wrap">
+    <h2 class="h2 up">Visão geral do plano</h2>
+    <p class="tema"><b>Tema:</b> Funções Exponenciais e Logarítmicas com Modelagem Matemática: investigando os impactos do El Niño nos sistemas hidrológicos brasileiros.</p>
+    <div class="facts">
+      <div class="fact"><span class="k">Público-alvo</span><b>2ª série EM</b><span class="x">1ª à 3ª série do Ensino Médio</span></div>
+      <div class="fact o"><span class="k">Aulas</span><b>5 aulas</b><span class="x">50 min cada · 250 min</span></div>
+      <div class="fact"><span class="k">Área</span><b>Matemática</b><span class="x">e suas tecnologias, em diálogo com Ciências da Natureza</span></div>
+      <div class="fact o"><span class="k">Metodologia</span><b>Modelagem</b><span class="x">Matemática, com dados reais do SGB</span></div>
     </div>
-    <div class="pic"><span class="bar" aria-hidden="true"></span><div class="slant"><img src="assets/rio.webp" alt="Rio cercado de floresta" loading="lazy"></div></div>
+    <div class="problem"><span class="k">Problema central</span><p>As alterações nos níveis dos rios, nas vazões e nos volumes de chuva durante os períodos de influência do El Niño <b>podem ser representadas matematicamente por funções exponenciais e logarítmicas?</b> O que os dados históricos e recentes revelam sobre o comportamento das bacias hidrográficas brasileiras?</p></div>
+    <div class="box">
+      <p class="upper">Conteúdos matemáticos</p>
+      <div class="cts"><span class="ptag">Função/Equação exponencial</span><span class="ptag">Log e propriedades</span><span class="ptag">Função logarítmica</span><span class="ptag">Interpretação e Construção Gráfica</span></div>
+      <p class="upper">Objetivo geral</p>
+      <p>Desenvolver uma investigação por meio da Modelagem Matemática, utilizando dados hidrológicos reais para analisar possíveis relações entre o fenômeno El Niño e as alterações nos níveis, nas vazões e nos volumes de chuva das bacias hidrográficas brasileiras, mobilizando conhecimentos sobre funções exponenciais e logarítmicas.</p>
+    </div>
   </div>
+  <img class="over-earth" src="assets/earth.webp" alt="" aria-hidden="true">
 </section>
 
-<!-- 3 · HABILIDADES -->
-<section class="pad" id="habilidades" data-label="Habilidades">
-  <svg class="drop" aria-hidden="true"><use href="#gota"/></svg>
-  <div class="wrap hab">
-    <div class="pic" aria-hidden="true"><div class="slant" style="background:#10202f"><img src="assets/linhas.webp" alt=""></div><span class="bar b1"></span><span class="bar b2"></span></div>
+<!-- 3 · OBJETIVOS E RECURSOS -->
+<section class="pad" id="objetivos" data-label="Objetivos e recursos">
+  <img class="leaf" data-float="1" src="assets/leaf.webp" alt="" aria-hidden="true" style="right:2%;top:10px;width:min(10vw,120px);transform:rotate(22deg)">
+  <div class="wrap objr">
     <div>
-      <h2 class="h2">Habilidades</h2>
-      <p class="sub">Habilidades da BNCC trabalhadas neste plano. Toque numa habilidade para ver o que ela pede.</p>
-      <div class="hab-list">
-        <div class="hab-item"><button type="button" aria-expanded="false"><span class="tag">EM13MAT304</span></button><p>Resolver e elaborar problemas com funções exponenciais. <i class="ph">[ajuste]</i></p><p class="more">No plano: a vazão do rio cresce de forma exponencial quando a cota sobe.</p></div>
-        <div class="hab-item"><button type="button" aria-expanded="false"><span class="tag">EM13MAT305</span></button><p>Resolver e elaborar problemas com funções logarítmicas. <i class="ph">[ajuste]</i></p><p class="more">No plano: o logaritmo responde "quanto a cota precisa subir para a vazão chegar a um valor".</p></div>
+      <h2 class="h2 up">Objetivos de aprendizagem</h2>
+      <div class="seg" id="ofilter" role="group" aria-label="Quais objetivos mostrar" style="margin-bottom:16px"><button type="button" aria-pressed="true" data-f="all">Todos (11)</button><button type="button" aria-pressed="false" data-f="key">Principais (6)</button></div>
+      <ol class="olist" id="olist">
+        <li class="key">Compreender o fenômeno El Niño e seus possíveis impactos nos sistemas hidrológicos brasileiros.</li>
+        <li class="key">Identificar e selecionar dados reais de precipitação, vazão e níveis dos rios.</li>
+        <li>Organizar e representar informações por meio de tabelas e gráficos.</li>
+        <li>Identificar padrões de crescimento, decrescimento e variação percentual.</li>
+        <li>Investigar situações que possam ser representadas por funções exponenciais.</li>
+        <li class="key">Compreender o crescimento e o decaimento exponencial em situações contextualizadas.</li>
+        <li class="key">Aplicar propriedades dos logaritmos na interpretação de modelos matemáticos.</li>
+        <li>Estabelecer relações entre as representações algébricas, gráficas e tabulares das funções estudadas.</li>
+        <li>Construir e avaliar modelos matemáticos a partir dos dados coletados.</li>
+        <li class="key">Analisar as possibilidades e limitações dos modelos desenvolvidos.</li>
+        <li class="key">Desenvolver autonomia, pensamento crítico e capacidade de argumentação matemática.</li>
+      </ol>
+    </div>
+    <div>
+      <p class="eyebrow" style="color:var(--green);margin-top:12px">● Recursos</p>
+      <div class="res-grid">
+        <div class="res"><img src="assets/ic-computador.webp" alt="" aria-hidden="true"><span>Computadores, notebooks, tablets ou smartphones com acesso à internet.</span></div>
+        <div class="res"><img src="assets/ic-projetor.webp" alt="" aria-hidden="true"><span>Projetor multimídia<br>Lousa e giz</span></div>
+        <div class="res"><img src="assets/ic-calculadora.webp" alt="" aria-hidden="true"><span>Calculadora Científica</span></div>
+        <div class="res"><img src="assets/ic-painel.webp" alt="" aria-hidden="true"><span>Boletins e relatórios do Serviço Geológico do Brasil.</span></div>
+        <a class="res" href="https://kauan-franca1.github.io/Elnino-Analise/" target="_blank" rel="noopener"><img src="assets/ic-site.webp" alt="" aria-hidden="true"><span><b>Site de apoio ↗</b></span></a>
+        <div class="res"><img src="assets/ic-sace.webp" alt="" aria-hidden="true"><span>Sistema de Alerta de Eventos Críticos (SACE)</span></div>
       </div>
     </div>
   </div>
 </section>
 
 <!-- 4 · COMPETÊNCIAS -->
-<section class="pad" id="competencias" data-label="Competências">
-  <svg class="drop" aria-hidden="true"><use href="#gota"/></svg>
-  <div class="wrap comp">
-    <div>
-      <h2 class="h2">Competências</h2>
-      <p class="sub">Competências da BNCC que orientam as aulas. <i class="ph">[inserir]</i></p>
-      <div class="items">
-        <div class="it"><span class="num">01</span><h3>Competência 1</h3><p><i class="ph">[Inserir descrição]</i></p></div>
-        <div class="it"><span class="num">02</span><h3>Competência 3</h3><p><i class="ph">[Inserir descrição]</i></p></div>
+<section class="pad bncc" id="competencias" data-label="BNCC: competências">
+  <div class="wrap">
+    <p class="eyebrow">BNCC</p>
+    <h2 class="h2 up">Competências</h2>
+    <div class="grid3">
+      <div class="ccard"><h3>Competência específica 1</h3><p>Utilizar <b>conhecimentos matemáticos</b> para <b>interpretar situações do cotidiano</b> e de diferentes áreas do conhecimento.</p></div>
+      <div class="ccard c"><h3>Competência específica 2</h3><p><b>Investigar desafios</b> da sociedade e <b>tomar decisões responsáveis</b> utilizando a Matemática.</p></div>
+      <div class="ccard"><h3>Competência específica 3</h3><p><b>Construir e analisar modelos matemáticos</b> para representar <b>situações reais</b> e avaliar seus resultados.</p></div>
+      <div class="ccard"><h3>Competência específica 4</h3><p>Utilizar <b>diferentes representações matemáticas</b> (gráficos, tabelas, expressões e recursos digitais) para resolver situações e comunicar resultados.</p></div>
+      <div class="ccard c"><h3>Competência específica 5</h3><p><b>Investigar padrões, formular hipóteses</b> e testar propriedades matemáticas <b>utilizando diferentes estratégias e tecnologias.</b></p></div>
+    </div>
+  </div>
+  <div class="comp-art" aria-hidden="true"><div class="slant" style="background:#10202f"><img src="assets/curva.webp" alt=""></div></div>
+</section>
+
+<!-- 5 · HABILIDADES -->
+<section class="pad bncc" id="habilidades" data-label="BNCC: habilidades">
+  <div class="wrap">
+    <p class="eyebrow">BNCC</p>
+    <h2 class="h2 up">Habilidades</h2>
+    <div class="seg hfilter" id="hfilter" role="group" aria-label="Filtrar habilidades"><button type="button" aria-pressed="true" data-f="all">Todas</button><button type="button" aria-pressed="false" data-f="dados">Dados e gráficos</button><button type="button" aria-pressed="false" data-f="exp">Exponencial</button><button type="button" aria-pressed="false" data-f="log">Logaritmo</button></div>
+    <div class="grid3">
+      <div class="ccard hab-card" data-t="dados"><span class="code">EM13MAT101</span><p>Interpretar situações reais por meio de gráficos e taxas de variação.</p></div>
+      <div class="ccard c hab-card" data-t="dados"><span class="code">EM13MAT102</span><p>Analisar gráficos e dados estatísticos, identificando possíveis erros de interpretação.</p></div>
+      <div class="ccard hab-card" data-t="exp"><span class="code">EM13MAT304</span><p>Compreender e aplicar funções exponenciais em situações reais.</p></div>
+      <div class="ccard hab-card" data-t="log"><span class="code">EM13MAT305</span><p>Compreender e aplicar funções logarítmicas em diferentes contextos.</p></div>
+      <div class="ccard c hab-card" data-t="exp log dados"><span class="code">EM13MAT403</span><p>Relacionar funções exponenciais e logarítmicas por meio de gráficos, tabelas e tecnologias digitais.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- 6 · METODOLOGIA -->
+<section class="pad" id="metodologia" data-label="Metodologia">
+  <img class="leaf" data-float="1" src="assets/leaf.webp" alt="" aria-hidden="true" style="left:1%;top:10px;width:min(9vw,100px);transform:rotate(-20deg)">
+  <img class="leaf" data-float="-1" src="assets/leaf-blur.webp" alt="" aria-hidden="true" style="right:2%;bottom:3%;width:min(10vw,120px)">
+  <div class="dots br" aria-hidden="true" style="left:0;right:auto;-webkit-mask-image:radial-gradient(ellipse at 0 100%,#000 0,transparent 70%);mask-image:radial-gradient(ellipse at 0 100%,#000 0,transparent 70%)"></div>
+  <div class="wrap">
+    <h2 class="h2">Metodologia</h2>
+    <div class="met">
+      <div class="met-main">
+        <span class="k">Modelagem Matemática</span>
+        <p>A proposta utiliza a Modelagem Matemática, por meio da investigação do fenômeno El Niño e seus impactos nos sistemas hidrológicos brasileiros. Escolha uma etapa:</p>
+        <div class="steps" id="steps" role="group" aria-label="Etapas da metodologia">
+          <button type="button" aria-pressed="true" data-i="0"><b>1</b><span>Investigação da realidade</span></button>
+          <button type="button" aria-pressed="false" data-i="1"><b>2</b><span>Matematização</span></button>
+          <button type="button" aria-pressed="false" data-i="2"><b>3</b><span>Análise dos modelos</span></button>
+          <button type="button" aria-pressed="false" data-i="3"><b>4</b><span>Socialização e reflexão</span></button>
+        </div>
+        <div class="step-out" id="step-out" aria-live="polite"></div>
       </div>
-    </div>
-    <div class="tiles" aria-hidden="true">
-      <div class="slant t1" style="background:#10202f"><img src="assets/curva.webp" alt=""></div>
-      <div class="slant t2"><img src="assets/ondas-circ.webp" alt=""></div>
-    </div>
-  </div>
-</section>
-
-<!-- 5 · BNCC HABILIDADES -->
-<section class="pad bncc" id="bncc-habilidades" data-label="BNCC: habilidades">
-  <div class="wrap">
-    <p class="eyebrow">BNCC</p>
-    <h2 class="h2">Habilidades</h2>
-    <div class="bncc-grid">
-      <div class="ccard"><h3>EM13MAT304</h3><p>Resolver e elaborar problemas com funções exponenciais. <i class="ph">[confira e ajuste o texto]</i></p></div>
-      <div class="ccard c"><h3>EM13MAT305</h3><p>Resolver e elaborar problemas com funções logarítmicas. <i class="ph">[confira e ajuste o texto]</i></p></div>
-      <div class="ccard"><h3><i class="ph">[Outra habilidade]</i></h3><p><i class="ph">[Inserir código e descrição]</i></p></div>
-    </div>
-  </div>
-</section>
-
-<!-- 6 · BNCC COMPETÊNCIAS -->
-<section class="pad bncc" id="bncc-competencias" data-label="BNCC: competências">
-  <div class="wrap">
-    <p class="eyebrow">BNCC</p>
-    <h2 class="h2">Competências</h2>
-    <div class="bncc-3">
-      <div class="ccard"><h3>Competência específica 1</h3><p><i class="ph">[Inserir descrição]</i></p></div>
-      <div class="ccard c"><h3>Competência específica 3</h3><p><i class="ph">[Inserir descrição]</i></p></div>
-      <div class="ccard"><h3>Competências gerais</h3><p><i class="ph">[Inserir descrição]</i></p></div>
+      <div class="met-side">
+        <div class="gbox"><h3>Papel do professor</h3><p>Mediador e orientador do processo investigativo, incentivando a autonomia e a participação dos estudantes.</p></div>
+        <div class="gbox"><h3>Recursos didáticos</h3><ul><li>Dados e boletins do SGB/SACE e CPTEC/INPE;</li><li>Computadores ou smartphones com acesso à internet;</li><li>Calculadoras e simuladores matemáticos;</li><li>Projetor, gráficos e planilhas.</li></ul></div>
+      </div>
     </div>
   </div>
 </section>
 
 <!-- 7 · CRONOGRAMA -->
-<section class="pad bncc" id="cronograma" data-label="Cronograma">
+<section class="pad bncc" id="cronograma" data-label="Sequência de aulas">
   <div class="wrap">
     <p class="eyebrow">Cronograma</p>
-    <h2 class="h2">Tempo e divisão das aulas</h2>
+    <h2 class="h2 up">Sequência de aulas</h2>
+    <p class="sub">250 minutos no total. A barra mostra o peso de cada encontro; toque numa aula para ver os detalhes.</p>
+    <div class="tbar" id="tbar" role="group" aria-label="Distribuição do tempo das aulas">
+      <button type="button" data-i="0" style="flex:50;background:#0f7c86" aria-pressed="true">Aula 1 · 50</button>
+      <button type="button" data-i="1" style="flex:100;background:#226670" aria-pressed="false">Aula 2 · 100</button>
+      <button type="button" data-i="2" style="flex:50;background:#2a9aa1" aria-pressed="false">Aula 3 · 50</button>
+      <button type="button" data-i="3" style="flex:50;background:#ef8020" aria-pressed="false">Aula 4 · 50</button>
+    </div>
+    <div class="tscale" aria-hidden="true"><span>0</span><span>50</span><span>100</span><span>150</span><span>200</span><span>250 min</span></div>
     <div class="timeline" id="timeline" role="group" aria-label="Aulas">
-      <button type="button" class="aula" aria-pressed="true"><span class="lbl">Aula 1</span><span class="dot"></span><span class="ccard"><h3>Função exponencial</h3><p><i class="ph">[tempo: __ min]</i><br><i class="ph">[conteúdo e objetivo]</i></p></span></button>
-      <button type="button" class="aula" aria-pressed="false"><span class="lbl">Aula 2</span><span class="dot"></span><span class="ccard"><h3>Logaritmo: definição</h3><p><i class="ph">[tempo: __ min]</i><br><i class="ph">[conteúdo e objetivo]</i></p></span></button>
-      <button type="button" class="aula" aria-pressed="false"><span class="lbl">Aula 3</span><span class="dot"></span><span class="ccard"><h3>Propriedades e gráficos</h3><p><i class="ph">[tempo: __ min]</i><br><i class="ph">[conteúdo e objetivo]</i></p></span></button>
-      <button type="button" class="aula" aria-pressed="false"><span class="lbl">Aula 4</span><span class="dot"></span><span class="ccard"><h3>Aplicação com a turma</h3><p><i class="ph">[tempo: __ min]</i><br><i class="ph">[conteúdo e objetivo]</i></p></span></button>
+      <button type="button" class="aula" aria-pressed="true"><span class="lbl">Aula 1</span><span class="dot"></span><span class="ccard"><h3>Contextualização interdisciplinaridade</h3><span class="min">50 min</span><span class="bloom">lembrar, compreender e analisar</span></span></button>
+      <button type="button" class="aula" aria-pressed="false"><span class="lbl">Aula 2</span><span class="dot"></span><span class="ccard"><h3>Revisão Função logarítmica e exponencial</h3><span class="min">100 min</span><span class="bloom">lembrar, compreender e aplicar</span></span></button>
+      <button type="button" class="aula" aria-pressed="false"><span class="lbl">Aula 3</span><span class="dot"></span><span class="ccard"><h3>Propriedades e gráficos · missão 1 e 2</h3><span class="min">50 min</span><span class="bloom">compreender, aplicar, analisar e avaliar</span></span></button>
+      <button type="button" class="aula" aria-pressed="false"><span class="lbl">Aula 4</span><span class="dot"></span><span class="ccard"><h3>Aplicação e discussão com a turma · missão 3 e Desafio</h3><span class="min">50 min</span><span class="bloom">compreender, aplicar, analisar e avaliar</span></span></button>
     </div>
-    <div class="aula-detail" aria-live="polite"><span class="n" id="ad-n">1</span><h3 id="ad-h">Função exponencial</h3><p id="ad-p"></p></div>
-  </div>
-</section>
-
-<!-- 8 · TEMPO E DIVISÃO -->
-<section class="pad" id="tempo" data-label="Tempo e divisão das aulas">
-  <svg class="drop" aria-hidden="true"><use href="#gota"/></svg>
-  <div class="wrap tempo">
-    <div class="pic">
-      <div class="shape"><img src="assets/gradiente.webp" alt="" aria-hidden="true"></div>
-      <div class="strip">Aula 3: propriedades e gráficos <i class="ph" style="color:#d6eef0">[__ min]</i> • Aula 4: aplicação com a turma <i class="ph" style="color:#d6eef0">[__ min]</i></div>
-    </div>
-    <div>
-      <h2 class="h2">Tempo e divisão das aulas</h2>
-      <p class="sub"><i class="ph">[Nº de aulas]</i> de <i class="ph">[__]</i> minutos, organizadas em quatro momentos.</p>
-      <div class="tags">
-        <span class="ptag">• Aula 1: função exponencial <i class="ph" style="color:#d6eef0">[__ min]</i></span>
-        <span class="ptag o">• Aula 2: logaritmo e definição <i class="ph" style="color:#fff3e6">[__ min]</i></span>
-      </div>
-      <div class="calc">
-        <p class="eyebrow" style="margin:0">Planejar o tempo</p>
-        <label for="tmin">Minutos por aula <output id="tmin-o" for="tmin">50</output></label><input type="range" id="tmin" min="30" max="100" step="5" value="50">
-        <div class="bars" id="tbars" aria-hidden="true"></div>
-        <p class="tot" id="ttot"></p>
-        <p class="note" style="margin-top:4px">Simulação para ajudar a preencher os campos; o plano ainda não define esses tempos.</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- 9 · ATIVIDADES -->
-<section class="pad" id="atividades" data-label="Atividades">
-  <svg class="drop" aria-hidden="true"><use href="#gota"/></svg>
-  <div class="wrap ativ">
-    <div>
-      <h2 class="h2">Atividades</h2>
-      <p class="sub">Três momentos em cada aula: abertura, desenvolvimento e fechamento.</p>
-      <div class="moments">
-        <div class="moment"><span class="tag">01. Abertura</span><p><i class="ph">[Pergunta-gatilho, exemplo ou problema inicial]</i></p></div>
-        <div class="moment"><span class="tag">02. Desenvolvimento</span><p><i class="ph">[Explicação, exercícios guiados e discussão]</i></p></div>
-      </div>
-    </div>
-    <div class="art" aria-hidden="true">
-      <div class="slant a1"><img src="assets/mar-claro.webp" alt=""></div>
-      <div class="slant a2"></div>
-      <div class="slant a3"><img src="assets/sol-alto.webp" alt=""></div>
-    </div>
-  </div>
-</section>
-
-<!-- 10 · APLICAÇÃO COM A SALA -->
-<section class="pad" id="aplicacao" data-label="Aplicação com a sala">
-  <svg class="drop" aria-hidden="true"><use href="#gota"/></svg>
-  <div class="wrap">
-    <div class="apl-top">
-      <div><h3>01. Produto final</h3><p><i class="ph">[O que os alunos entregam: gráfico, relatório, apresentação]</i></p></div>
-      <div><h3>02. Avaliação</h3><p><i class="ph">[Critérios de avaliação da atividade]</i></p></div>
-      <div><h2 class="h2" style="font-size:clamp(32px,3.6vw,46px)">Aplicação com a sala</h2><p>El Niño e o nível dos rios: modelo exponencial e logaritmo com dados do SACE/SGB.</p></div>
-    </div>
-    <div class="apl-art">
-      <div class="slant"><img src="assets/sol-mar.webp" alt="" aria-hidden="true"></div>
-      <div class="box"><div><i class="ph">[Descrever a atividade: organização da turma, materiais, tempo e passos com os dados dos rios]</i></div></div>
-    </div>
+    <div class="aula-detail" aria-live="polite"><span class="n" id="ad-n">1</span><h3 id="ad-h"></h3><span class="mm" id="ad-m"></span><div class="chips" id="ad-b"></div></div>
 
     <div class="lab" id="lab-explog">
-      <div class="lab-head"><h3>Exponencial e logaritmo: uma desfaz a outra</h3><span class="tagx">Exemplo interativo</span></div>
+      <div class="lab-head"><h3>Prévia das missões: exponencial e logaritmo, uma desfaz a outra</h3><span class="tagx">Exemplo interativo</span></div>
       <div class="lab-grid">
         <svg id="el-svg" role="img" aria-label="Gráficos de y = b elevado a x e de y = log na base b de x, espelhados pela reta y = x"></svg>
         <div class="ctrl">
@@ -438,7 +432,6 @@ body.show-ph .ph{background:#fff1c9;box-shadow:0 0 0 2px #f3c44f;color:#6b4c00}
         </div>
       </div>
     </div>
-
     <div class="lab" id="lab-rio">
       <div class="lab-head"><h3>A régua do rio: cota e vazão no Rio Uruguai</h3><span class="tagx">Exemplo interativo · dados SGB</span></div>
       <div class="lab-grid">
@@ -453,27 +446,45 @@ body.show-ph .ph{background:#fff1c9;box-shadow:0 0 0 2px #f3c44f;color:#6b4c00}
         </div>
       </div>
     </div>
+    <div class="goto"><a class="btn-p" href="https://kauan-franca1.github.io/Elnino-Analise/" target="_blank" rel="noopener">Abrir o site de apoio com as missões ↗</a></div>
   </div>
 </section>
 
-<!-- 11 · AVALIAÇÃO E RECURSOS -->
-<section class="pad" id="avaliacao" data-label="Avaliação e recursos">
-  <svg class="drop" aria-hidden="true"><use href="#gota"/></svg>
-  <div class="wrap aval">
-    <div>
-      <h2 class="h2">Avaliação e recursos</h2>
-      <p class="sub">Como a aprendizagem será verificada e o que será necessário.</p>
-      <div class="items">
-        <div><div class="it" style="display:grid;grid-template-columns:64px 1fr;gap:6px 14px"><span class="num">01</span><h3 style="font:700 19px/1.3 var(--f-title);margin:0;color:var(--ink)">Avaliação</h3><p style="grid-column:2;margin:0;font-size:16px"><i class="ph">[Instrumentos, critérios e pesos]</i></p></div></div>
-        <div><div class="it" style="display:grid;grid-template-columns:64px 1fr;gap:6px 14px"><span class="num">02</span><h3 style="font:700 19px/1.3 var(--f-title);margin:0;color:var(--ink)">Recursos</h3><p style="grid-column:2;margin:0;font-size:16px"><i class="ph">[Quadro, computador, planilha, dados SACE/SGB, calculadora científica]</i></p></div></div>
+<!-- 8 · AVALIAÇÃO -->
+<section class="pad" id="avaliacao" data-label="Avaliação e resultados">
+  <img class="leaf" data-float="1" src="assets/leaf.webp" alt="" aria-hidden="true" style="right:3%;top:10px;width:min(10vw,120px);transform:rotate(18deg)">
+  <img class="leaf" data-float="-1" src="assets/leaf-blur.webp" alt="" aria-hidden="true" style="left:1%;bottom:3%;width:min(9vw,100px)">
+  <div class="dots tr" aria-hidden="true" style="left:0;right:auto;-webkit-mask-image:radial-gradient(ellipse at 0 0,#000 0,transparent 70%);mask-image:radial-gradient(ellipse at 0 0,#000 0,transparent 70%)"></div>
+  <div class="wrap">
+    <h2 class="h2">Avaliação e Resultados Esperados</h2>
+    <p class="sub">Marque os critérios observados em cada grupo durante a aula.</p>
+    <div class="aval-t">
+      <div class="lbl">Critérios de avaliação</div>
+      <div class="cell">
+        <div class="crit" id="crit">
+          <button type="button" aria-pressed="false"><span class="bx"></span>Participação e colaboração nas atividades em grupo;</button>
+          <button type="button" aria-pressed="false"><span class="bx"></span>Organização e interpretação dos dados;</button>
+          <button type="button" aria-pressed="false"><span class="bx"></span>Correção matemática das representações gráficas;</button>
+          <button type="button" aria-pressed="false"><span class="bx"></span>Compreensão dos conceitos de periodicidade, amplitude e período;</button>
+          <button type="button" aria-pressed="false"><span class="bx"></span>Capacidade de justificar as escolhas e reconhecer limitações dos modelos;</button>
+          <button type="button" aria-pressed="false"><span class="bx"></span>Reflexão crítica sobre os resultados e a aprendizagem individual.</button>
+        </div>
+        <div class="meter"><span id="crit-t">0 de 6 critérios</span><span class="bar"><i id="crit-b"></i></span><button type="button" class="btn-p ghost" id="crit-r" style="padding:8px 14px;font-size:13px">Limpar</button></div>
       </div>
+      <div class="lbl b">Resultados esperados</div>
+      <div class="cell"><ul class="res-list">
+        <li>Compreensão das funções periódicas a partir de fenômenos reais;</li>
+        <li>Desenvolvimento da capacidade de interpretar e construir gráficos;</li>
+        <li>Aproximação entre Matemática e Ciências da Natureza;</li>
+        <li>Desenvolvimento da investigação, argumentação e pensamento crítico;</li>
+        <li>Compreensão de que modelos matemáticos representam a realidade por aproximações e possuem limitações.</li>
+      </ul></div>
     </div>
-    <div class="art" aria-hidden="true"><div class="slant"><img src="assets/mar-claro.webp" alt=""></div></div>
   </div>
 </section>
 
-<!-- 12 · REFERÊNCIAS -->
-<section class="pad refs" id="referencias" data-label="Referências">
+<!-- 9 · REFERÊNCIAS -->
+<section class="pad refs bncc" id="referencias" data-label="Referências">
   <div class="wrap">
     <p class="eyebrow">Fontes</p>
     <h2 class="h2">Referências</h2>
@@ -486,7 +497,7 @@ body.show-ph .ph{background:#fff1c9;box-shadow:0 0 0 2px #f3c44f;color:#6b4c00}
   </div>
 </section>
 
-<!-- 13 · OBRIGADO -->
+<!-- 10 · OBRIGADO -->
 <section class="pad thanks" id="obrigado" data-label="Obrigado(a)!">
   <svg class="drop" aria-hidden="true"><use href="#gota"/></svg>
   <div class="wrap"><h2>OBRIGADO(A)!</h2></div>
@@ -499,8 +510,11 @@ body.show-ph .ph{background:#fff1c9;box-shadow:0 0 0 2px #f3c44f;color:#6b4c00}
   <svg class="drop" aria-hidden="true"><use href="#gota"/></svg>
   <div class="wrap">
     <h2 class="h2">Acesse pelo celular</h2>
-    <p class="sub">Aponte a câmera para o código e explore os exemplos interativos.</p>
-    <div class="qr-card"><img src="assets/qr-plano.svg" alt="QR code para esta página" width="280" height="280"><h3>Plano de aula · El Niño</h3><a href="https://kauan-franca1.github.io/plano-de-aula-el-nino/" id="qr-link">kauan-franca1.github.io/plano-de-aula-el-nino</a></div>
+    <p class="sub">Aponte a câmera para o código e explore os exemplos e as missões.</p>
+    <div class="qr-grid">
+      <div class="qr-card"><img src="assets/qr-plano.svg" alt="QR code para esta página" width="260" height="260"><h3>Plano de aula · El Niño</h3><a href="https://kauan-franca1.github.io/plano-de-aula-el-nino/">kauan-franca1.github.io/plano-de-aula-el-nino</a></div>
+      <div class="qr-card o"><img src="assets/qr-site-analise.svg" alt="QR code para o site de apoio" width="260" height="260"><h3>Site de apoio · missões</h3><a href="https://kauan-franca1.github.io/Elnino-Analise/" target="_blank" rel="noopener">kauan-franca1.github.io/Elnino-Analise</a></div>
+    </div>
   </div>
 </section>
 </main>
@@ -512,22 +526,32 @@ function press(g,b){Array.prototype.forEach.call(g.querySelectorAll("button"),fu
 var RM=window.matchMedia("(prefers-reduced-motion:reduce)").matches;
 
 /* campos a preencher */
-(function(){var n=document.querySelectorAll(".ph").length,b=$("phbtn");$("phn").textContent=n;
+(function(){var n=document.querySelectorAll(".ph").length,b=$("phbtn");$("phn").textContent=n;if(!n){b.hidden=true;return}
   b.addEventListener("click",function(){var on=b.getAttribute("aria-pressed")==="true";b.setAttribute("aria-pressed",on?"false":"true");document.body.classList.toggle("show-ph",!on)})})();
 
-/* habilidades */
-document.querySelectorAll(".hab-item button").forEach(function(b){b.addEventListener("click",function(){var it=b.parentNode,on=it.classList.toggle("open");b.setAttribute("aria-expanded",on?"true":"false")})});
+/* objetivos: todos ou principais */
+(function(){var f=$("ofilter"),l=$("olist");f.addEventListener("click",function(e){var b=e.target.closest("button");if(!b)return;press(f,b);l.classList.toggle("only-key",b.getAttribute("data-f")==="key")})})();
+
+/* habilidades: filtro */
+(function(){var f=$("hfilter"),cs=document.querySelectorAll(".hab-card");f.addEventListener("click",function(e){var b=e.target.closest("button");if(!b)return;press(f,b);var k=b.getAttribute("data-f");
+  cs.forEach(function(c){var m=k==="all"||c.getAttribute("data-t").split(" ").indexOf(k)>=0;c.classList.toggle("dim",!m);c.classList.toggle("hi",m&&k!=="all")})})})();
+
+/* metodologia */
+(function(){var P=[["Investigação da realidade","Compreensão do fenômeno El Niño, análise de dados reais e identificação das variáveis relevantes."],["Matematização","Organização dos dados, formulação de hipóteses e aplicação de funções exponenciais e logarítmicas na construção de modelos matemáticos."],["Análise dos modelos","Interpretação dos resultados, comparação com dados reais e avaliação das possibilidades e limitações dos modelos construídos."],["Socialização e reflexão","Apresentação das soluções, discussão dos resultados e reflexão coletiva sobre as estratégias utilizadas."]];
+  var g=$("steps");function s(i){press(g,g.children[i]);$("step-out").innerHTML="<b>"+(i+1)+". "+P[i][0]+"</b>"+P[i][1]}
+  g.addEventListener("click",function(e){var b=e.target.closest("button");if(b)s(+b.getAttribute("data-i"))});s(0)})();
 
 /* cronograma */
-(function(){var tl=$("timeline"),as=tl.querySelectorAll(".aula");
-  function sel(i){press(tl,as[i]);$("ad-n").textContent=i+1;$("ad-h").textContent=as[i].querySelector("h3").textContent;$("ad-p").innerHTML=as[i].querySelector("p").innerHTML.replace("<br>"," · ")}
-  as.forEach(function(a,i){a.addEventListener("click",function(){sel(i)})});sel(0)})();
+(function(){var tl=$("timeline"),as=tl.querySelectorAll(".aula"),tb=$("tbar");
+  function sel(i){press(tl,as[i]);press(tb,tb.children[i]);var c=as[i];$("ad-n").textContent=i+1;$("ad-h").textContent=c.querySelector("h3").textContent;
+    var m=c.querySelector(".min").textContent;$("ad-m").innerHTML=m+"<small>"+(m.indexOf("100")===0?"2 aulas de 50 min":"1 aula")+"</small>";
+    $("ad-b").innerHTML=c.querySelector(".bloom").textContent.replace(/ e /," , ").split(",").map(function(v){return"<span>"+v.trim()+"</span>"}).join("")}
+  as.forEach(function(a,i){a.addEventListener("click",function(){sel(i)})});tb.querySelectorAll("button").forEach(function(b){b.addEventListener("click",function(){sel(+b.getAttribute("data-i"))})});sel(0)})();
 
-/* planejar o tempo */
-(function(){var r=$("tmin"),names=["Aula 1","Aula 2","Aula 3","Aula 4"],cols=["#0f7c86","#ef8020","#226670","#d9532f"];
-  function d(){var m=+r.value;$("tmin-o").textContent=m;$("tbars").innerHTML=names.map(function(n,i){return'<span style="flex:1;background:'+cols[i]+'">'+n+'</span>'}).join("");
-    $("ttot").innerHTML="4 aulas × "+m+" min = <b>"+(4*m)+" min</b> ("+fmt(4*m/60,1)+" h) no total."}
-  r.addEventListener("input",d);d()})();
+/* critérios */
+(function(){var cr=$("crit");function u(){var n=cr.querySelectorAll('[aria-pressed="true"]').length;$("crit-t").textContent=n+" de 6 critérios";$("crit-b").style.width=(n/6*100)+"%"}
+  cr.querySelectorAll("button").forEach(function(b){b.addEventListener("click",function(){var on=b.getAttribute("aria-pressed")==="true";b.setAttribute("aria-pressed",on?"false":"true");b.querySelector(".bx").textContent=on?"":"✓";u()})});
+  $("crit-r").addEventListener("click",function(){cr.querySelectorAll("button").forEach(function(b){b.setAttribute("aria-pressed","false");b.querySelector(".bx").textContent=""});u()})})();
 
 /* exponencial × logaritmo */
 (function(){var svg=$("el-svg"),seg=$("el-b"),xs=$("el-x"),base="2";
@@ -536,14 +560,14 @@ document.querySelectorAll(".hab-item button").forEach(function(b){b.addEventList
     var m=34,lo=-2.5,hi=8,sx=function(v){return m+(v-lo)/(hi-lo)*(W-2*m)},sy=function(v){return H-m-(v-lo)/(hi-lo)*(H-2*m)},b=B(),x=+xs.value,y=Math.pow(b,x),s="";
     for(var g=-2;g<=8;g+=2){s+='<line x1="'+sx(g)+'" x2="'+sx(g)+'" y1="'+sy(lo)+'" y2="'+sy(hi)+'" stroke="#eef1f2"/><line x1="'+sx(lo)+'" x2="'+sx(hi)+'" y1="'+sy(g)+'" y2="'+sy(g)+'" stroke="#eef1f2"/>';if(g)s+='<text x="'+sx(g)+'" y="'+(sy(0)+16)+'" text-anchor="middle" font-size="12" fill="#5f6c75">'+g+'</text><text x="'+(sx(0)-6)+'" y="'+(sy(g)+4)+'" text-anchor="end" font-size="12" fill="#5f6c75">'+g+'</text>'}
     s+='<line x1="'+sx(lo)+'" x2="'+sx(hi)+'" y1="'+sy(0)+'" y2="'+sy(0)+'" stroke="#9aa6ad"/><line x1="'+sx(0)+'" x2="'+sx(0)+'" y1="'+sy(lo)+'" y2="'+sy(hi)+'" stroke="#9aa6ad"/>';
-    s+='<line x1="'+sx(lo)+'" y1="'+sy(lo)+'" x2="'+sx(hi)+'" y2="'+sy(hi)+'" stroke="#9aa6ad" stroke-dasharray="6 6"/><text x="'+(sx(6.6))+'" y="'+(sy(7.2))+'" font-size="13" fill="#5f6c75">y = x</text>';
-    var p1="",p2="";for(var i=0;i<=200;i++){var t=lo+i/200*(hi-lo),e=Math.pow(b,t);if(e<=hi+1)p1+=(p1?"L":"M")+sx(t).toFixed(1)+" "+sy(Math.min(e,hi+1)).toFixed(1);var u=Math.pow(b,lo+i/200*(Math.log(hi)/Math.log(b)-lo));}
-    for(var j=1;j<=300;j++){var xx=j/300*hi;if(xx<=0)continue;var l=Math.log(xx)/Math.log(b);if(l<lo)continue;p2+=(p2?"L":"M")+sx(xx).toFixed(1)+" "+sy(l).toFixed(1)}
+    s+='<line x1="'+sx(lo)+'" y1="'+sy(lo)+'" x2="'+sx(hi)+'" y2="'+sy(hi)+'" stroke="#9aa6ad" stroke-dasharray="6 6"/><text x="'+sx(6.6)+'" y="'+sy(7.2)+'" font-size="13" fill="#5f6c75">y = x</text>';
+    var p1="",p2="";for(var i=0;i<=200;i++){var t=lo+i/200*(hi-lo),e=Math.pow(b,t);if(e<=hi+1)p1+=(p1?"L":"M")+sx(t).toFixed(1)+" "+sy(e).toFixed(1)}
+    for(var j=1;j<=300;j++){var xx=j/300*hi,l=Math.log(xx)/Math.log(b);if(l<lo)continue;p2+=(p2?"L":"M")+sx(xx).toFixed(1)+" "+sy(l).toFixed(1)}
     s+='<path d="'+p1+'" fill="none" stroke="#ef8020" stroke-width="3.5" stroke-linecap="round"/><path d="'+p2+'" fill="none" stroke="#0f7c86" stroke-width="3.5" stroke-linecap="round"/>';
-    if(y<=hi){s+='<line x1="'+sx(x)+'" y1="'+sy(y)+'" x2="'+sx(y)+'" y2="'+sy(x)+'" stroke="#10202f" stroke-dasharray="3 5"/><circle cx="'+sx(x)+'" cy="'+sy(y)+'" r="7" fill="#ef8020" stroke="#fff" stroke-width="2"/><circle cx="'+sx(y)+'" cy="'+sy(x)+'" r="7" fill="#0f7c86" stroke="#fff" stroke-width="2"/>'}
+    if(y<=hi)s+='<line x1="'+sx(x)+'" y1="'+sy(y)+'" x2="'+sx(y)+'" y2="'+sy(x)+'" stroke="#10202f" stroke-dasharray="3 5"/><circle cx="'+sx(x)+'" cy="'+sy(y)+'" r="7" fill="#ef8020" stroke="#fff" stroke-width="2"/><circle cx="'+sx(y)+'" cy="'+sy(x)+'" r="7" fill="#0f7c86" stroke="#fff" stroke-width="2"/>';
     var bl=base==="e"?"e":base,ln=base==="e"?"ln":base==="10"?"log":"log₂";
     s+='<text x="'+(W-m)+'" y="'+(m-8)+'" text-anchor="end" font-size="14" font-weight="700" fill="#ef8020">y = '+bl+'ˣ</text><text x="'+(W-m)+'" y="'+(m+12)+'" text-anchor="end" font-size="14" font-weight="700" fill="#0f7c86">y = '+ln+' x</text>';
-    svg.innerHTML=s;$("el-xo").textContent=fmt(x,1);$("el-y").textContent=y>=1000?fmt(y,0):fmt(y,2);$("el-yl").textContent=bl+"^"+fmt(x,1);$("el-l").textContent=fmt(x,1);$("el-ll").textContent=ln+" "+(y>=1000?fmt(y,0):fmt(y,2))+" = "+fmt(x,1)}
+    svg.innerHTML=s;var ys=y>=1000?fmt(y,0):fmt(y,2);$("el-xo").textContent=fmt(x,1);$("el-y").textContent=ys;$("el-yl").textContent=bl+"^"+fmt(x,1);$("el-l").textContent=fmt(x,1);$("el-ll").textContent=ln+" "+ys+" = "+fmt(x,1)}
   seg.addEventListener("click",function(e){var b=e.target.closest("button");if(!b)return;base=b.getAttribute("data-b");press(seg,b);draw()});xs.addEventListener("input",draw);
   if(window.ResizeObserver)new ResizeObserver(function(){draw()}).observe(svg);draw()})();
 
@@ -567,10 +591,12 @@ document.querySelectorAll(".hab-item button").forEach(function(b){b.addEventList
 /* rolagem */
 (function(){var secs=[].slice.call(document.querySelectorAll("main>section")),nav=$("sidenav"),prog=$("prog");
   secs.forEach(function(s){var a=document.createElement("a");a.href="#"+s.id;a.innerHTML="<span>"+s.getAttribute("data-label")+"</span>";a.setAttribute("aria-label",s.getAttribute("data-label"));nav.appendChild(a)});
-  var links=nav.children,px=[].slice.call(document.querySelectorAll(".px")),tick=false;
+  var links=nav.children,px=[].slice.call(document.querySelectorAll(".px")),fl=[].slice.call(document.querySelectorAll("[data-float]")),tick=false;
+  fl.forEach(function(f){f.dataset.base=f.style.transform||""});
   function frame(){tick=false;var y=scrollY,vh=innerHeight,dh=document.documentElement.scrollHeight-vh;prog.style.width=(dh>0?y/dh*100:0)+"%";
     var cur=0;secs.forEach(function(s,i){if(s.offsetTop-vh*.4<=y)cur=i});Array.prototype.forEach.call(links,function(a,i){a.setAttribute("aria-current",i===cur?"true":"false")});
-    if(RM)return;px.forEach(function(e){e.style.transform="scale(1.08) translateY("+(y*.12).toFixed(1)+"px)"})}
+    if(RM)return;px.forEach(function(e){e.style.transform="scale(1.08) translateY("+(y*.12).toFixed(1)+"px)"});
+    fl.forEach(function(e){var r=e.getBoundingClientRect();if(r.bottom<-100||r.top>vh+100)return;e.style.transform=e.dataset.base+" translateY("+((r.top-vh/2)*.08*(+e.dataset.float)).toFixed(1)+"px)"})}
   addEventListener("scroll",function(){if(!tick){tick=true;requestAnimationFrame(frame)}},{passive:true});addEventListener("resize",frame);frame()})();
 </script>
 
